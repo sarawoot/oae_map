@@ -1,0 +1,15 @@
+http://ows.gistda.or.th:80/geoserver
+
+# php.ini
+upload_max_filesize = 48M
+post_max_size = 64M
+
+# bug
+ที่ layer switcher เมื่อสรา้ง folder และ สรา้ง layer ใน folder แล้วลบ  folder จะสามารถได้แต่ เมื่อดึงค่ามาแสดงที่ ่jstree แล้ว error
+
+setup
+1. copy file ใน php libsasl.dll ไปที่ apache/bin
+2. เปิด extension ldap ใน php.ini
+
+
+'SRID=4326;PPOINT(100 13)'

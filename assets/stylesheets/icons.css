@@ -1,0 +1,75 @@
+.icon-point{
+  background-image: url("../images/icons/point.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-line{
+  background-image: url("../images/icons/line.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-polygon{
+  background-image: url("../images/icons/polygon.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-measure-line{
+  background-image: url("../images/icons/measure-line.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-measure-area{
+  background-image: url("../images/icons/measure-area.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-remove{
+  background-image: url("../images/icons/remove.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-remove-all{
+  background-image: url("../images/icons/remove-all.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-hand{
+  background-image: url("../images/icons/hand.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-buffer{
+  background-image: url("../images/icons/buffer.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-circle{
+  background-image: url("../images/icons/circle.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-rectangle{
+  background-image: url("../images/icons/rectangle.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-square{
+  background-image: url("../images/icons/square.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-sm{
+  padding: 6px;
+}

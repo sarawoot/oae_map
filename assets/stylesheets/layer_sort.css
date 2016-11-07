@@ -1,0 +1,12 @@
+#layer_sortable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+#layer_sortable li { margin: 0 5px 5px 5px; padding: 5px; font-size: 1.2em; height: 1.5em; border: 1px solid; }
+html>body #layer_sortable li { height: 1.5em; line-height: .5em; text-align: center; }
+.ui-state-highlight { 
+  height: 40px; 
+  line-height: 1.2em; 
+  margin: 5px 0 5px 0;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  background-color: #aaa;
+}
