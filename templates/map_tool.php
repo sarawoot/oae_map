@@ -74,6 +74,10 @@
         <span class="glyphicon glyphicon-search"></span>
       </button>
 
+      <a href="report.php" type="button" class="btn btn-default icon-sm" data-type="tooltip" data-placement="bottom" title="Report">
+        <span class="glyphicon glyphicon-list-alt"></span>
+      </a>
+
       <button type="button" class="btn btn-default icon-sm" id="btnCofigDraw" data-type="tooltip" data-placement="bottom" title="Drawing Setting">
         <span class="glyphicon glyphicon-cog"></span>
       </button>

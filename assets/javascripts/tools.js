@@ -1,6 +1,37 @@
 $(function(){
   $('[data-type="tooltip"]').tooltip();
 
+  $("[number-only]").on('keypress',function(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    var number = this.value.split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    if(number.length>1 && charCode == 46){
+      return false;
+    }
+    return true;
+  })
+
+                
+
+  $("#confirm_reprojection").click(function() {
+    var projection_from = $('#projection_from').val();
+    var projection_to = $('#projection_to').val();
+    var x_from = Number($('#x_from').val());
+    var y_from = Number($('#y_from').val());
+    
+    if (x_from != 0 && y_from != 0) {
+      var coordinate = ol.proj.transform([x_from, y_from], projection_from, projection_to)
+      $('#x_to').val(coordinate[0]); 
+      $('#y_to').val(coordinate[1]); 
+    } else {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+    }
+
+  });
+
   $("#btnSearch").click(function function_name(argument) {
     oaeConfig.mode = "normal";
     var tmp = $("#tmpSearchFarmer").html(),

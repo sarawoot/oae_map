@@ -18,6 +18,9 @@ if (ol.Map.prototype.getLayer === undefined) {
   };
 }
 
+proj4.defs("EPSG:32647", "+proj=utm +zone=47 +datum=WGS84 +units=m +no_defs");
+proj4.defs("EPSG:32648", "+proj=utm +zone=48 +datum=WGS84 +units=m +no_defs");
+
 var overlayStyle = (function() {
     /* jshint -W069 */
     var styles = {};

@@ -5,6 +5,7 @@
   <script src="assets/plugins/jquery.bootpag.min.js"></script>
   <script src="assets/plugins/bootstrap-slider/dist/bootstrap-slider.min.js"></script>
   <script src="assets/plugins/ol3/ol.js"></script>
+  <script src="assets/plugins/proj4.js"></script>
   <script src="assets/plugins/bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
   <script src="assets/plugins/jquery-ui-1.12.0/jquery-ui.js"></script>
   <script src="assets/plugins/jstree/dist/jstree.js"></script>
