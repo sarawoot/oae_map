@@ -98,15 +98,15 @@ map.on('singleclick', function(evt) {
     success: function(res) {
       if (res.features.length > 0) {
         var prov_code = res.features[0].properties.prov_code;
-        url_report = 'http://192.168.0.220:9502/analytics/saw.dll?'
-        url_report += 'Go&Path=/shared/OAE_REPORT/GIS_REG_02&Action=Navigate&P0=4'
-        url_report += '&P1=eq&P2="ข้อมูลพื้นฐานครัวเรือนเกษตรกร"."ปีที่ขึ้นทะเบียนเกษตรกร"&P3="'+$("#farmer-year").val()+'"'
-        url_report += '&P4=eq&P5="การประกอบกิจกรรมการเกษตร"."รหัสประเภทกิจกรรม"&P6="'+$("#farmer-type").val()+'"'
-        url_report += '&P7=eq&P8="การประกอบกิจกรรมการเกษตร"."รหัสชนิดพืช/สัตว์"&P9="'+$("#farmer-detail").val()+'"'
-        url_report += '&P10=eq&P11="การถือครองที่ดิน"."รหัสจังหวัด"&P12="'+prov_code+'"'
-        url_report += '&NQUser=weblogic&NQPassword=Welcome1';
+        // url_report = 'http://192.168.0.220:9502/analytics/saw.dll?'
+        // url_report += 'Go&Path=/shared/OAE_REPORT/GIS_REG_02&Action=Navigate&P0=4'
+        // url_report += '&P1=eq&P2="ข้อมูลพื้นฐานครัวเรือนเกษตรกร"."ปีที่ขึ้นทะเบียนเกษตรกร"&P3="'+$("#farmer-year").val()+'"'
+        // url_report += '&P4=eq&P5="การประกอบกิจกรรมการเกษตร"."รหัสประเภทกิจกรรม"&P6="'+$("#farmer-type").val()+'"'
+        // url_report += '&P7=eq&P8="การประกอบกิจกรรมการเกษตร"."รหัสชนิดพืช/สัตว์"&P9="'+$("#farmer-detail").val()+'"'
+        // url_report += '&P10=eq&P11="การถือครองที่ดิน"."รหัสจังหวัด"&P12="'+prov_code+'"'
+        // url_report += '&NQUser=weblogic&NQPassword=Welcome1';
       }
     }
   });
-  window.open(url_report,"_blank");
+  // window.open(url_report,"_blank");
 });

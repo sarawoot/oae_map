@@ -4,18 +4,21 @@
   
   // SQL intersect
   $sql_intersect = "select id from (select id,";
-  $sql_intersect .= "ST_Intersection('SRID=4326;".$_GET["wkt"]."'::geometry,geom) as clipped_geom ";
+  $sql_intersect .= "ST_Intersection('SRID=4326;".$_POST["wkt"]."'::geometry,geom) as clipped_geom ";
   $sql_intersect .= "from farmer_area) as tb1 where not ST_IsEmpty(tb1.clipped_geom) ";
   $sql_intersect = "select * from farmer_area where id in (".$sql_intersect.") ";
+  if (isset($_POST['year']) and $_POST['year'] != '') {
+    $sql_intersect .= " and year = ".$_POST['year'];
+  }
   // SQL Count Row
-  if ($_GET["total"] == '1') {
+  if ($_POST["total"] == '1') {
     $sql_count = "select count(*) as n from (".$sql_intersect.") as tb;";
     $result = pg_query($conn, $sql_count);
     $row = pg_fetch_assoc($result);
   } else {
     $offset = 0;
-    if ( isset($_GET['page']) ) {
-      $offset = (intval($_GET['page']) - 1)*10;
+    if ( isset($_POST['page']) ) {
+      $offset = (intval($_POST['page']) - 1)*10;
     }
     // pagination
     $sql_intersect .= "limit 20 offset ".$offset;

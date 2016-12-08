@@ -61,6 +61,9 @@ var LayerSwitcher = (function(){
   };
 
   var treeMenu = function(node){
+    if (role == "guest") {
+      return false;
+    }
     var items = {},
         data = node.data;
     if (data.add_able) {
@@ -546,20 +549,7 @@ var LayerSwitcher = (function(){
           var tr = $("<tr>", {
             click: function(){
              var data = f.properties;
-              var content = "<br><p><b>ชื่อ-นามสกุล</b>: "+data.profile_name+" "+data.profile_surname+"</p>";
-              content += "<p><b>จังหวัด</b>: "+data.province_name+"</p>";
-              content += "<p><b>สินค้า</b>: "+data.detail_name+"</p>";
-              var area = "";
-              if (data.act_rai != 0) {
-                area += " "+data.act_rai+" ไร่";
-              }
-              if (data.act_ngan != 0) {
-                area += " "+data.act_ngan+" งาน";
-              }
-              if (data.act_wa != 0) {
-                area += " "+data.act_wa+" วา";
-              }
-              content += "<p><b>ขนาดพื้นที่</b>: "+area+"</p>";
+              var content = contentPopupFarmer(data);
               popup.show(ol.proj.transform(f.geometry.coordinates, 'EPSG:4326', 'EPSG:3857'), content);
             }
           });

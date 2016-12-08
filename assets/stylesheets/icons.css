@@ -16,6 +16,12 @@
   height: 16px;
 }
 
+.icon-polygon2{
+  background-image: url("../images/icons/polygon2.png");
+  width: 16px;
+  height: 16px;
+}
+
 .icon-measure-line{
   background-image: url("../images/icons/measure-line.png");
   width: 16px;

@@ -68,12 +68,31 @@
     <form class="form-inline" id="frmBuffer" action="javascript:void(0)">
       <input type="hidden" name="wkt" value="<%= wkt %>">
       <div class="form-group">
-        <label>ระยะ Buffer</label>
-        <input type="number" class="form-control" name="buffer"> เมตร
+        <label style="width:100px;">ปี</label>
+        <select name="year" class="form-control" id="year_buffer" style="width:200px;">
+        </select>
+      </div>
+      <br>
+      <br>
+      <div class="form-group">
+        <label style="width:100px;">ระยะ Buffer</label>
+        <input type="number" class="form-control" name="buffer" style="width:200px;"> เมตร
       </div>
     </form>
   </script>  
   <!-- End Template Buffer -->
+  <!-- Template Intersect -->
+  <script type="text/template" id="tmpIntersect">
+    <form class="form-inline" id="frmIntersect" action="javascript:void(0)">
+      <input type="hidden" name="wkt" value="<%= wkt %>">
+      <div class="form-group">
+        <label style="width:100px;">ปี</label>
+        <select name="year" class="form-control" id="year_intersect" style="width:200px;">
+        </select>
+      </div>
+    </form>
+  </script>  
+  <!-- End Template Intersect -->
   <?php require 'add_edit_layer.php'; ?>
   <?php require 'layer_sort.php'; ?>
   <?php require 'search_farmer.php'; ?>

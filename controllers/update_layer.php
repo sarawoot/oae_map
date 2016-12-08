@@ -1,4 +1,5 @@
 <?php
+  include("../config/auth.php");
   include("../config/config.php");
   $conn = connectionDB();
 
@@ -8,7 +9,9 @@
       $_POST["layer"]["url"] = $image["path"];
     }
   }
-
+  $_POST["layer"]["updated_by"] = $_SESSION['user_id'];
+  $_POST["layer"]["updated_at"] = date("Y-m-d H:i:s");
+  
   $res = pg_update($conn, 'layers', $_POST["layer"], array("id" => $_POST["id"]) );
   if ($res) {
       echo json_encode(array("success" => true));
