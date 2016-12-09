@@ -5,7 +5,8 @@
       <br>
       <select name="year" id="search_year" class="form-control select2-muti" style="width: 100%">
       </select>
-    </div><div class="form-group">
+    </div>
+    <div class="form-group">
       <label>กลุ่มสินค้า</label>
       <br>
       <select name="type[]" id="search_type" class="form-control select2-muti" style="width: 100%" multiple>

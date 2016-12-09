@@ -14,8 +14,8 @@
   <link rel="stylesheet" href="assets/stylesheets/pace.css">
   <style>
     .ol-popup-content {
-      min-width: 200px;
-      max-height: 200px;
+      min-width: 250px;
+      max-height: 250px;
       overflow-x: auto;
     }
   </style>

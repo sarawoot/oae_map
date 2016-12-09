@@ -11,7 +11,6 @@ var buffer = (function(){
       $(this).addClass("active");
       removeOtherInteraction();
 
-
       var draw = new ol.interaction.Draw({
         features: features,
         type: 'Point'
@@ -26,9 +25,31 @@ var buffer = (function(){
         var tmp = _.template($("#tmpBuffer").html()),
             dialog = $("#dialog");
         dialog.html(tmp({wkt: wkt}));
+
+        $.ajax({
+          url: "controllers/years.php",
+          type: 'GET',
+          // async: false,
+          dataType: "json",
+          success: function(res){
+            var elem = $("#year_buffer");
+            elem.empty();
+            elem.append($("<option>",{
+              text: '',
+              value: ''
+            }));
+            _.each(res, function(item){
+              elem.append($("<option>",{
+                text: item.name,
+                value: item.code
+              }));
+            });
+          }
+        });
+
         dialog.dialog({
-          width: 330,
-          height: 160,
+          width: 400,
+          height: 230,
           title: "Buffer",
           buttons: {
             Close: {
@@ -49,7 +70,7 @@ var buffer = (function(){
                   var feature = format.readFeature( wkt, 
                     {featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326'});
                   var geom = feature.getGeometry();
-                  calcBuffer(geom.getCoordinates(), buffer);  
+                  calcBuffer(geom.getCoordinates(), buffer, $("#year_buffer").val());  
                 } else {
                   alert("กรุณาทำรายการให้ถูกต้อง");
                 }
@@ -68,9 +89,115 @@ var buffer = (function(){
       });
       map.addInteraction(draw);
     });
+
+    $("#mapToolbar button[data-group=intersect]").click(function(){
+      clearAll();
+      oaeConfig.mode = "buffer";
+      deactiveMenuAll();
+      $(this).addClass("active");
+      removeOtherInteraction();
+      var value = $(this).attr("category");
+
+
+      var geometryFunction;
+      if (value === 'Square') {
+        value = 'Circle';
+        geometryFunction = ol.interaction.Draw.createRegularPolygon(4);
+      } else if (value === 'Box') {
+        value = 'LineString';
+        maxPoints = 2;
+        geometryFunction = function(coordinates, geometry) {
+          if (!geometry) {
+            geometry = new ol.geom.Polygon(null);
+          }
+          var start = coordinates[0];
+          var end = coordinates[1];
+          geometry.setCoordinates([
+            [start, [start[0], end[1]], end, [end[0], start[1]], start]
+          ]);
+          return geometry;
+        };
+      }
+
+
+      var draw = new ol.interaction.Draw({
+        features: features,
+        type: value,
+        geometryFunction: geometryFunction
+      });
+
+      draw.on('drawend', function(evt) {
+        var feature = evt.feature;
+        var format = new ol.format.WKT();
+        var wkt = format.writeFeature( feature, 
+                    {featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326'});
+        removeOtherInteraction();
+        feature.set("type", "buffer_area");
+
+        var tmp = _.template($("#tmpIntersect").html()),
+            dialog = $("#dialog");
+        dialog.html(tmp({wkt: wkt}));
+
+        $.ajax({
+          url: "controllers/years.php",
+          type: 'GET',
+          // async: false,
+          dataType: "json",
+          success: function(res){
+            var elem = $("#year_intersect");
+            elem.empty();
+            elem.append($("<option>",{
+              text: '',
+              value: ''
+            }));
+            _.each(res, function(item){
+              elem.append($("<option>",{
+                text: item.name,
+                value: item.code
+              }));
+            });
+          }
+        });
+
+        dialog.dialog({
+          width: 400,
+          height: 180,
+          title: "Intersect",
+          buttons: {
+            Close: {
+              click: function () {
+                clearAll();
+                $("#resultPanel").empty();
+              },
+              text: 'ยกเลิก'
+            },
+            Save: {
+              text: "ยืนยัน",
+              click: $.proxy(function(){
+                var form = $("#frmIntersect")[0];
+                paginate(this.feature, form.year.value);
+              }, {feature: feature})
+            }
+          },
+          position: { my: "right bottom", at: "right bottom", of: window },
+          drag: dragDialog,
+          close: function(){
+            dialogDestroy();
+          }
+        });
+
+        deactiveMenuAll();
+        $("#btnPanMap").addClass("active");
+        return false;
+      });
+      map.addInteraction(draw);
+    });
+
+
+
   };
 
-  var calcBuffer = function(coor, buffer){
+  var calcBuffer = function(coor, buffer, year){
     var circle = new ol.geom.Circle(coor, Number(buffer));
     feature_tmp = [];
 
@@ -89,6 +216,10 @@ var buffer = (function(){
 
     var polygon = ol.geom.Polygon.fromCircle(circle, 64);
     feature = new ol.Feature({ geometry: polygon });
+    paginate(feature, year);
+  };
+
+  var paginate = function(feature, year) {
     var format = new ol.format.WKT();
     var wkt = format.writeFeature( feature, 
                 {featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326'});
@@ -98,19 +229,24 @@ var buffer = (function(){
     var div_paginate = $("<div>");
     div_paginate.empty();
     var tag_center = $("<center>");
+    var span_total = $("<span>", {
+        style: 'color: #acacac;'
+      });
     tag_center.append(div_paginate);
+    tag_center.append(span_total);
     panel.append(tag_center);
     $.ajax({
       url: 'controllers/buffer.php',
-      type: 'GET',
+      type: 'POST',
       dataType: 'json',
-      data: { wkt: wkt, total: 1 },
+      data: { wkt: wkt, total: 1, year: year },
       success: function(res){
         if (res.n === '0') { 
           alert('ไม่พบข้อมูล');
           return; 
         }
         var total_page = Math.ceil(Number(res.n)/20);
+        span_total.html("ทั้งหมด "+res.n+" รายการ")
         div_paginate.bootpag({
           total: total_page,
           maxVisible: 5,
@@ -124,23 +260,23 @@ var buffer = (function(){
           lastClass: 'last',
           firstClass: 'first'
         }).on("page", function(event, num){
-          render(wkt, num);
+          render(wkt, num, year);
         });
-        render(wkt, 1);
+        render(wkt, 1, year);
       }
     });
     // Expand Resule Panel if collapsed
     if (!$("#collapseResultPanel").hasClass("in")) {
       $("#resultHeader a").click();
     }
-  };
+  }
 
-  var render = function(wkt, page){
+  var render = function(wkt, page, year){
     $.ajax({
       url: 'controllers/buffer.php',
-      type: 'GET',
+      type: 'POST',
       dataType: 'json',
-      data: { wkt: wkt, page: page },
+      data: { wkt: wkt, page: page, year: year },
       success: function(res){
         $("#resultPanel table").remove();
         popup.hide();
@@ -176,21 +312,8 @@ var buffer = (function(){
           var detail_name = f.properties.detail_name;
           var tr = $("<tr>", {
             click: function(){
-             var data = f.properties;
-              var content = "<br><p><b>ชื่อ-นามสกุล</b>: "+data.profile_name+" "+data.profile_surname+"</p>";
-              content += "<p><b>จังหวัด</b>: "+data.province_name+"</p>";
-              content += "<p><b>สินค้า</b>: "+data.detail_name+"</p>";
-              var area = "";
-              if (data.act_rai != 0) {
-                area += " "+data.act_rai+" ไร่";
-              }
-              if (data.act_ngan != 0) {
-                area += " "+data.act_ngan+" งาน";
-              }
-              if (data.act_wa != 0) {
-                area += " "+data.act_wa+" วา";
-              }
-              content += "<p><b>ขนาดพื้นที่</b>: "+area+"</p>";
+              var data = f.properties;
+              var content = contentPopupFarmer(data);
               popup.show(ol.proj.transform(f.geometry.coordinates, 'EPSG:4326', 'EPSG:3857'), content);
             }
           });

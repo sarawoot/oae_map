@@ -70,6 +70,19 @@
         <span class="glyphicon icon-buffer"></span>
       </button>
 
+      <!-- id="btnIntersect" -->
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default icon-sm" data-group="intersect" data-type="tooltip" data-placement="bottom" title="Intersect" category="Polygon">
+        <span class="glyphicon icon-polygon2"></span>
+        </button>
+        <button type="button" class="btn btn-default icon-sm" data-group="intersect" category="Box" data-type="tooltip" data-placement="bottom" title="Intersect">
+          <span class="glyphicon icon-rectangle"></span>
+        </button>
+        <button type="button" class="btn btn-default icon-sm" data-group="intersect" category="Square" data-type="tooltip" data-placement="bottom" title="Intersect">
+          <span class="glyphicon icon-square"></span>
+        </button>
+      </div>
+
       <button type="button" class="btn btn-default icon-sm" id="btnSearch" data-type="tooltip" data-placement="bottom" title="Search">
         <span class="glyphicon glyphicon-search"></span>
       </button>

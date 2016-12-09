@@ -14,8 +14,6 @@ $(function(){
     return true;
   })
 
-                
-
   $("#confirm_reprojection").click(function() {
     var projection_from = $('#projection_from').val();
     var projection_to = $('#projection_to').val();
@@ -294,7 +292,7 @@ $(function(){
         var geojson = JSON.parse(res.fc);
 
         var feature_ = _.filter(features.getArray(), function(feature){ 
-          return feature.get('type') == 'result-search' 
+          return feature.get('type') == 'result-search' || feature.get('type') == 'buffer_area'
         });
         _.each(feature_, function(feature) {
           features.remove(feature)
@@ -315,21 +313,8 @@ $(function(){
           var detail_name = f.properties.detail_name;
           var tr = $("<tr>", {
             click: function(){
-             var data = f.properties;
-              var content = "<br><p><b>ชื่อ-นามสกุล</b>: "+data.profile_name+" "+data.profile_surname+"</p>";
-              content += "<p><b>จังหวัด</b>: "+data.province_name+"</p>";
-              content += "<p><b>สินค้า</b>: "+data.detail_name+"</p>";
-              var area = "";
-              if (data.act_rai != 0) {
-                area += " "+data.act_rai+" ไร่";
-              }
-              if (data.act_ngan != 0) {
-                area += " "+data.act_ngan+" งาน";
-              }
-              if (data.act_wa != 0) {
-                area += " "+data.act_wa+" วา";
-              }
-              content += "<p><b>ขนาดพื้นที่</b>: "+area+"</p>";
+              var data = f.properties;
+              var content = contentPopupFarmer(data);
               popup.show(ol.proj.transform(f.geometry.coordinates, 'EPSG:4326', 'EPSG:3857'), content);
             }
           });
@@ -428,6 +413,7 @@ $(function(){
     });
     $(".select2-muti").select2();
     $("#frmSearchFarmer").unbind().submit(function(){
+
       var panel = $("#resultPanel");
       panel.empty();
       var div_paginate = $("<div>");

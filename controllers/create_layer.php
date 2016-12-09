@@ -1,5 +1,7 @@
 <?php
+  include("../config/auth.php");
   include("../config/config.php");
+  date_default_timezone_set("Asia/Bangkok");
   $conn = connectionDB();
 
   if ($_FILES["layer_url"]["name"] != "") {
@@ -8,6 +10,8 @@
       $_POST["layer"]["url"] = $image["path"];
     }
   }
+  $_POST["layer"]["created_by"] = $_SESSION['user_id'];
+  $_POST["layer"]["created_at"] = date("Y-m-d H:i:s");
 
   $res = pg_insert($conn, 'layers', $_POST["layer"]);
   if ($res) {

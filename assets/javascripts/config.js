@@ -16,3 +16,29 @@ var dragDialog = function(event, ui) {
   ui.position = iObj;  
   $(window).scrollTop(0);  
 };
+
+var contentPopupFarmer = function(data) {
+  var content = "<br><p><b>ชื่อ-นามสกุล</b>: "+data.profile_name+" "+data.profile_surname+"</p>";
+  if (role == 'admin') {
+    content += "<p><b>ที่อยู่</b>: "+data.address+"</p>";  
+  }
+  var area = "";
+  if (data.act_rai != 0) {
+    area += " "+data.act_rai+" ไร่";
+  }
+  if (data.act_ngan != 0) {
+    area += " "+data.act_ngan+" งาน";
+  }
+  if (data.act_wa != 0) {
+    area += " "+data.act_wa+" วา";
+  }
+
+  content += "<p style='margin-top:5px;'><h5><b><u>พื้นที่เพาะปลูก</u></b></h5></p>";
+  content += "<p><b>สินค้า</b>: "+data.detail_name+"</p>";
+  content += "<p><b>ขนาดพื้นที่</b>: "+area+"</p>";
+  content += "<p><b>ตำบล</b>: "+data.tambon_name+"</p>";
+  content += "<p><b>อำเภอ</b>: "+data.amphur_name+"</p>";
+  content += "<p><b>จังหวัด</b>: "+data.province_name+"</p>";
+
+  return content;
+}

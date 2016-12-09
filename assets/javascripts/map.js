@@ -404,6 +404,7 @@ function removeOtherInteraction() {
 function clearAll(){
   clearMap();
   dialogDestroy();
+  $("#resultPanel").empty();
 }
 
 function clearMap(){

@@ -6,15 +6,15 @@
   if ($_GET["province"] != "" and isset($_GET["province"])) {
     $search[] = "province_code in ('".join($_GET["province"], "', '")."')";
   }
-  // if ($_GET["type"] != "" and isset($_GET["type"])) {
-  //   $search[] = "type_code in ('".join($_GET["type"], "', '")."')";
-  // }
+  if ($_GET["type"] != "" and isset($_GET["type"])) {
+    $search[] = "type_code in ('".join($_GET["type"], "', '")."')";
+  }
   if ($_GET["detail"] != "" and isset($_GET["detail"])) {
     $search[] = "detail_name in ('".join($_GET["detail"], "', '")."')";
   }
-  // if ($_GET["year"] != "" and isset($_GET["year"])) {
-  //   $search[] = "SUBSTR(REGISTER_DATE,0, 4) = '".$_GET["year"]."'";
-  // }
+  if ($_GET["year"] != "" and isset($_GET["year"])) {
+    $search[] = "year = ".$_GET["year"];
+  }
   if (count($search) > 0) {
     $search = " where ".join($search, " and ");
   } else {
@@ -33,7 +33,7 @@
       $offset = (intval($_GET['page']) - 1)*10;
     }
     // pagination
-    $sql_first .= " limit 20 offset ".$offset;
+    $sql_first .= " order by province_name, profile_name, profile_surname limit 20 offset ".$offset;
     // SQL 
     $sql = "SELECT row_to_json(fc) as fc FROM ( "; 
     $sql .= "    SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ( ";

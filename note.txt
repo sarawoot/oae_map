@@ -9,7 +9,18 @@ post_max_size = 64M
 
 setup
 1. copy file ใน php libsasl.dll ไปที่ apache/bin
-2. เปิด extension ldap ใน php.ini
+2. เปิด extension ldap ใน php.
 
+
+max_connections = 100
+shared_buffers = 512MB
+effective_cache_size = 9GB
+work_mem = 20097kB
+maintenance_work_mem = 1536MB
+min_wal_size = 4GB
+max_wal_size = 8GB
+checkpoint_completion_target = 0.9
+wal_buffers = 16MB
+default_statistics_target = 500
 
 'SRID=4326;PPOINT(100 13)'

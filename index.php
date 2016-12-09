@@ -60,6 +60,9 @@
   
   <div id="dialog" title=""></div>
   <?php require 'templates/js_templates/all.php'; ?>
+  <script type="text/javascript">
+    var role = '<?php echo $_SESSION['role']; ?>';
+  </script>
   <?php require 'templates/javascript.php'; ?>
 
 </body>

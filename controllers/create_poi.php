@@ -1,4 +1,5 @@
 <?php 
+  include("../config/auth.php");
   include("../config/config.php");
   $conn = connectionDB();
   if ($_FILES["file"]["name"] != "") {
@@ -17,11 +18,13 @@
   }
   $_POST["poi"]["geom"] = "ST_GeometryFromText('".$_POST["poi"]["geom"]."')";
   $_POST["poi"]["gtype"] = "GeometryType(".$_POST["poi"]["geom"].")";
+  $_POST["poi"]["created_by"] = $_SESSION['user_id'];
+  $_POST["poi"]["created_at"] = date("Y-m-d H:i:s");
   $fields = array();
   $values = array();
   foreach ($_POST["poi"] as $key => $value){
     $fields[] = $key;
-    if ($key == "geom" or  $key == "gtype" ) {
+    if ($key == "geom" or  $key == "gtype" or $key == 'created_by' ) {
       $values[] = $value;
     } else {
       $values[] = "'".$value."'";
