@@ -27,11 +27,20 @@ $(function(){
   $("#report-farmer").submit(function(){
     // var host = location.href.replace(/\/([^\/]+)\/?$/, '/');
     $.ajax({
-      url: 'controllers/report/sharding_farmer.php',
+      url: 'controllers/report/sharding_farmer_report.php',
       type: 'GET',
       data: $("#report-farmer").serialize(),
       dataType: 'json',
       success: function(res) {
+    	 $.fancybox.open({
+				href : '#inline1',
+				type : 'inline',
+				closeBtn : false,
+				closeClick : false,
+				helpers   : { 
+						overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
+				}
+		});
         if (res.data.length == 0) { 
           provinceLayer.setSource(new ol.source.TileWMS({
             url: oaeConfig.geoserverUrl+"/oae/wms",
@@ -47,6 +56,7 @@ $(function(){
         }
         var sld_body = '<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><NamedLayer><Name>oae:provinces</Name><UserStyle><Title>Provinces</Title><Abstract>Provinces</Abstract><FeatureTypeStyle>';
         var colors = ["#008000","FBFB58","#FF0000"];
+        var length_data = 0;
         _.each(res.data,function(item) {
           sld_body += '<Rule><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>prov_code</ogc:PropertyName><ogc:Literal>';
           sld_body += item.province_code+'</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><PolygonSymbolizer><Fill>';
@@ -59,17 +69,31 @@ $(function(){
         });
         // <TextSymbolizer><Label><ogc:PropertyName>name_thai</ogc:PropertyName></Label><Font><CssParameter name="font-family">Tahoma</CssParameter><CssParameter name="font-size">13.0</CssParameter><CssParameter name="font-style">normal</CssParameter><CssParameter name="font-weight">bold</CssParameter></Font><LabelPlacement><PointPlacement><AnchorPoint><AnchorPointX>0.5</AnchorPointX><AnchorPointY>0.5</AnchorPointY></AnchorPoint><Displacement><DisplacementX>0.0</DisplacementX><DisplacementY>0.0</DisplacementY></Displacement></PointPlacement></LabelPlacement><Fill><CssParameter name="fill">#3D3D3D</CssParameter></Fill></TextSymbolizer>
         sld_body += '<Rule><Name>rule1</Name><Title>Rule 1</Title><Abstract>Rule 1</Abstract><PolygonSymbolizer><Fill><CssParameter name="fill-opacity">0</CssParameter></Fill><Stroke><CssParameter name="stroke">#3D3D3D</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>';
-        provinceLayer.setSource(new ol.source.TileWMS({
-          url: oaeConfig.geoserverUrl+"/oae/wms",
-          params: {
-            LAYERS: 'oae:provinces',
-            STYLES: '',
-            SLD_BODY: sld_body,
-            TILED: true
-          },
-          serverType: 'geoserver',
-          tileLoadFunction: tileLoadFunction
-        }));
+        source = new ol.source.TileWMS({
+            url: oaeConfig.geoserverUrl+"/oae/wms",
+            params: {
+              LAYERS: 'oae:provinces',
+              STYLES: '',
+              SLD_BODY: sld_body,
+              TILED: true
+            },
+            serverType: 'geoserver',
+            tileLoadFunction: tileLoadFunction
+          });
+        source.on('tileloadstart', function() {
+        	length_data = length_data + 1;
+        	
+        });
+        
+        source.on('tileloadend', function() {
+        	length_data = length_data - 1;
+        	if(length_data == 0)
+        		$.fancybox.close()
+        	
+        });
+        
+        provinceLayer.setSource(source);
+        
       }
     })
 

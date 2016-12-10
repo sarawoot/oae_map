@@ -21,6 +21,11 @@ oci_execute ( $result_year );
 <link rel="stylesheet" href="assets/plugins/ol3/ol.css">
 <link rel="stylesheet"
 	href="assets/plugins/select2-4.0.3/dist/css/select2.min.css">
+<style>
+.loading {
+	display: none;
+}
+</style>
 </head>
 
 <body>
@@ -49,13 +54,6 @@ oci_execute ( $result_year );
           </select>
 					</div>
 					<div class="form-group">
-						<label for="type">ที่ตั้ง</label> <select class="form-control"
-							select2>
-							<option>ที่ตั้งแปลง</option>
-							<option>ที่อยู่ติดต่อ</option>
-						</select>
-					</div>
-					<div class="form-group">
 						<label for="type">กลุ่มสินค้า</label> <select
 							id="farmer-group-type" name="group-type" class="form-control"
 							select2>
@@ -75,21 +73,49 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 					<div class="form-group">
 						<label for="type">ช่วงอายุ</label>
 						<p>
-							<select id="farmer-type" style="width: 100px" name="type"
+							<select id="farmer-age-1" style="width: 100px" name="age-1"
 								class="form-control" select2>
+								<option value=""></option>
+								
 							<?php for($i = 1;$i < 130;$i++){?><option value="<?php echo $i?>"><?php echo $i?></option><?php }?></select>
-							ถึง <select id="farmer-type" style="width: 100px" name="type"
+							ถึง <select id="farmer-age-2" style="width: 100px" name="age-2"
 								class="form-control" select2>
+								<option value=""></option>
+								
 							<?php for($i = 1;$i < 130;$i++){?><option value="<?php echo $i?>"><?php echo $i?></option><?php }?>
 						</select>
 						</p>
 					</div>
 					<div class="form-group">
-						<label for="type">การถือครองที่ดิน</label>
+						<label for="type">การถือครองที่ดิน</label> <select
+							id="farmer-area-area" name="area-type" class="form-control"
+							select2>
+							<option value=""></option>
+							<option value="1,2">ของครัวเรือน</option>
+							<option value="3">เช่า</option>
+							<option value="4">อื่นๆ</option>
+						</select>
 					</div>
 					<div class="form-group">
-						<label for="type">แหล่งน้ำ</label>
+						<label for="type">แหล่งน้ำ</label> <select id="farmer-water"
+							name="water" class="form-control" select2>
+							<option value=""></option>
+							<option value="WATER1_1">บ่อน้ำตื่น</option>
+							<option value="WATER1_2">บ่อบาดาล</option>
+							<option value="WATER1_3">สระน้ำ</option>
+						</select>
 					</div>
+					<div class="form-group">
+						<label for="type">ข้อมูลที่ต้องการสืบค้น</label> <select
+							id="farmer-expect-report" name="expect-report"
+							class="form-control" select2>
+							<option value="1">จำนวนทะเบียน</option>
+							<option value="2">เนื้อที่เพาะปลูก</option>
+							<option value="3">เนื้อที่เก็บเกี่ยว</option>
+							<option value="4">ผลผลิตที่คาดว่าจะได้รับ</option>
+						</select>
+					</div>
+
 
 
 					<button type="submit" class="btn btn-primary">ค้นหา</button>
@@ -100,16 +126,31 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 			</div>
 
 		</div>
+		<div id="inline1" style="width: 300px; display: none;">
+			<center>
+				<p>
+					<img src="assets/images/loader.gif">
+				</p>
+				<h3>Loading..</h3>
+			</center>
+		</div>
 	</form>
 	<!-- Javascript -->
 	<script src="assets/plugins/lodash.js"></script>
 	<script src="assets/plugins/jquery-1.12.4.min.js"></script>
+	
+
 	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
 	<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
 	<script src="assets/plugins/select2-4.0.3/dist/js/select2.full.min.js"></script>
 	<script src="assets/plugins/ol3/ol.js"></script>
 	<script src="assets/javascripts/config.js"></script>
 	<script src="assets/javascripts/report/map.js"></script>
+	<script type="text/javascript"
+		src="assets/plugins/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css"
+		href="assets/plugins/fancybox/source/jquery.fancybox.css?v=2.1.5"
+		media="screen" />
 	<script src="assets/javascripts/report/report.js"></script>
 	<script type="text/javascript">
 	$("#farmer-group-type").change(function(){

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>fancyBox - Fancy jQuery Lightbox Alternative | Demonstration</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<!-- Add jQuery library -->
+	<script type="text/javascript" src="http://localhost/oae/assets/plugins/jquery-1.12.4.min.js"></script>
+
+	<script type="text/javascript" src="source/jquery.fancybox.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="source/jquery.fancybox.css?v=2.1.5" media="screen" />
+
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+
+			$.fancybox.open({
+					href : '#inline1',
+					type : 'inline',
+					closeBtn : false,
+					closeClick : false,helpers   : { 
+   overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
+  }
+					
+			});
+
+		});
+		setInterval(function(){ 
+			$.fancybox.close()
+		}, 3000);
+	</script>
+	
+</head>
+<body>
+
+	<div id="inline1" style="width:300px;display: none;">
+	<center><p>
+		<img src="http://localhost/oae/assets/images/loader.gif">	
+		</p>
+		<h3>Loading..</h3>
+		</center>
+	</div>
+
+	
+</body>
+</html>

@@ -23,10 +23,12 @@
   if ($_GET["year"] != "" and isset($_GET["year"])) {
     $sql .= " AND SUBSTR(REGISTER_DATE,0, 4) = '".$_GET["year"]."'";
   }
+  
 
   $sql .= " GROUP BY PROVINCE.PROVINCE_CODE";
   $sql .= " ORDER BY PROVINCE.PROVINCE_CODE";
 
+  
   if ($sql != "") {
     $result = oci_parse($conn, $sql);
     oci_execute($result);
