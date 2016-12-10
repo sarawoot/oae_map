@@ -18,7 +18,7 @@ $expect_report_array = [
 		"count(PROFILE.PROFILE_CENTER_ID)",
 		"sum(ACTIVITY.ACT_RAI)",
 		"sum(NVL(ACTIVITY.PRODUCE_AREA,0))",
-		"sum(ACTIVITY.AMOUNT)" 
+		"sum(NVL(ACTIVITY.AMOUNT,0))" 
 ];
 
 $expect_report = (isset ( $_GET ['expect-report'] )) ? ( int ) $_GET ['expect-report'] : 0;
@@ -40,7 +40,7 @@ if ($_GET ["year"] != "" and isset ( $_GET ["year"] )) {
 
 if (isset ( $_GET ["age-1"] ) and isset ( $_GET ["age-2"] )) {
 	if ($_GET ["age-1"] != "'" && $_GET ["age-2"] != "")
-		$sql .= " AND (trunc(months_between(SYSDATE,PROFILE_BIRTHDAY)/12)  BETWEEN " . (( int ) $_GET ["age-1"]) . " AND " . (( int ) $_GET ["age-2"]) . " )";
+		$sql .= " AND (PROFILE_AGE  BETWEEN " . (( int ) $_GET ["age-1"]) . " AND " . (( int ) $_GET ["age-2"]) . " )";
 }
 
 if ($_GET ["area-type"] != "" and isset ( $_GET ["area-type"] )) {
@@ -55,7 +55,7 @@ $sql .= " GROUP BY PROVINCE.PROVINCE_CODE";
 $sql .= " ORDER BY PROVINCE.PROVINCE_CODE";
 
 // echo $sql;
-//exit ();
+// exit ();
 if ($sql != "") {
 	$result = oci_parse ( $conn, $sql );
 	oci_execute ( $result );

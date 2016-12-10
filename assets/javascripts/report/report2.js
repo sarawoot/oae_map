@@ -32,6 +32,7 @@ $(function(){
       data: $("#report-farmer").serialize(),
       dataType: 'json',
       success: function(res) {
+    	 
         if (res.data.length == 0) { 
           provinceLayer.setSource(new ol.source.TileWMS({
             url: oaeConfig.geoserverUrl+"/oae/wms",
@@ -45,6 +46,15 @@ $(function(){
           alert("ไม่พบข้อมูล");
           return false;
         }
+        $.fancybox.open({
+			href : '#inline1',
+			type : 'inline',
+			closeBtn : false,
+			closeClick : false,
+			helpers   : { 
+					overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
+			}
+        });
         var sld_body = '<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><NamedLayer><Name>oae:provinces</Name><UserStyle><Title>Provinces</Title><Abstract>Provinces</Abstract><FeatureTypeStyle>';
         var colors = ["#008000","FBFB58","#FF0000"];
         var length_data = 0;
@@ -78,7 +88,8 @@ $(function(){
         
         source.on('tileloadend', function() {
         	length_data = length_data - 1;
-        	
+        	if(length_data == 0)
+        		$.fancybox.close()
         	
         });
         
