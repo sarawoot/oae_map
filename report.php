@@ -47,10 +47,10 @@ oci_execute ( $result_year );
 							class="form-control" id="farmer-year" select2>
 							<option value=""></option>
             <?php
-												while ( ($row = oci_fetch_array ( $result_year, OCI_BOTH )) != false ) {
-													echo "<option value='" . $row ["YEAR"] . "'>" . iconv ( 'tis-620', 'utf-8', $row ["YEAR"] ) . "</option>";
-												}
-												?>
+            while ( ($row = oci_fetch_array ( $result_year, OCI_BOTH )) != false ) {
+              echo "<option value='" . $row ["YEAR"] . "'>" . iconv ( 'tis-620', 'utf-8', $row ["YEAR"] ) . "</option>";
+            }
+            ?>
           </select>
 					</div>
 					<div class="form-group">
@@ -60,7 +60,7 @@ oci_execute ( $result_year );
 							<option value=""></option>
 <?php
 while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
-	echo "<option value='" . $row ["GROUP_CODE"] . "'>" . iconv ( 'tis-620', 'utf-8', $row ["GROUP_NAME"] ) . "</option>";
+  echo "<option value='" . $row ["GROUP_CODE"] . "'>" . iconv ( 'tis-620', 'utf-8', $row ["GROUP_NAME"] ) . "</option>";
 }
 ?>
           				</select>
@@ -138,7 +138,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 	<!-- Javascript -->
 	<script src="assets/plugins/lodash.js"></script>
 	<script src="assets/plugins/jquery-1.12.4.min.js"></script>
-	
+
 
 	<script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
 	<script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
@@ -151,7 +151,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 	<link rel="stylesheet" type="text/css"
 		href="assets/plugins/fancybox/source/jquery.fancybox.css?v=2.1.5"
 		media="screen" />
-	<script src="assets/javascripts/report/report.js"></script>
+	<script src="assets/javascripts/report/report2.js"></script>
 	<script type="text/javascript">
 	$("#farmer-group-type").change(function(){
 	    $.ajax({
