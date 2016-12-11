@@ -32,15 +32,6 @@ $(function(){
       data: $("#report-farmer").serialize(),
       dataType: 'json',
       success: function(res) {
-    	 $.fancybox.open({
-				href : '#inline1',
-				type : 'inline',
-				closeBtn : false,
-				closeClick : false,
-				helpers   : { 
-						overlay : {closeClick: false} // prevents closing when clicking OUTSIDE fancybox 
-				}
-		});
         if (res.data.length == 0) { 
           provinceLayer.setSource(new ol.source.TileWMS({
             url: oaeConfig.geoserverUrl+"/oae/wms",
@@ -87,8 +78,7 @@ $(function(){
         
         source.on('tileloadend', function() {
         	length_data = length_data - 1;
-        	if(length_data == 0)
-        		$.fancybox.close()
+        	
         	
         });
         
