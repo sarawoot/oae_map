@@ -549,6 +549,12 @@ var LayerSwitcher = (function(){
           var tr = $("<tr>", {
             click: function(){
              var data = f.properties;
+             _.each(features.getArray(), function(item){ 
+                item.set('popup', 'hide');
+                if (data.id == item.get('id')) {
+                  item.set('popup', 'show');
+                }
+              })
               var content = contentPopupFarmer(data);
               popup.show(ol.proj.transform(f.geometry.coordinates, 'EPSG:4326', 'EPSG:3857'), content);
             }

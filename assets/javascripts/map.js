@@ -294,6 +294,26 @@ var features = new ol.Collection();
 var featureOverlay = new ol.layer.Vector({
   source: new ol.source.Vector({features: features}),
   style: function(feature, resolution){
+
+    if (feature.get('popup') == 'show') {
+      return [new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(142, 225, 247, 0.2)'
+        }),
+        stroke: new ol.style.Stroke({
+          color: "#2670ee",
+          width: 2
+        }),
+        image: new ol.style.Circle({
+          radius: 10,
+          fill: new ol.style.Fill({
+            color:  "#a00103" 
+          })
+        })
+      })];  
+    }
+
+
     if (feature.get("type") == "measure") {
       return [new ol.style.Style({
         fill: new ol.style.Fill({
