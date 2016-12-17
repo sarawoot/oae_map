@@ -80,10 +80,8 @@ if (isset ( $_GET ['province'] ) and $_GET ["province"] != "") {
   }
 }
 
-
 $sql .= $groupby;
 $sql .= $orderby;
-
 
 if ($sql != "") {
   $result = oci_parse ( $conn, $sql );
@@ -106,6 +104,10 @@ if ($sql != "") {
 }
 if ($num_max > 0) {
   $intervals = IntervalInt ( $num_min, $num_max, $level );
+}
+
+if ($num_max == $num_min) {
+  $intervals =[[0,0], [0,0], [$num_min,$num_max]];
 }
 
 $data = array (
