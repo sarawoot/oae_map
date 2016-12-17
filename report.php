@@ -30,6 +30,7 @@ oci_execute ( $result_year );
 
 <body>
 	<form id="report-farmer">
+		<input type="text" name="province" id="province" value=""/>
 		<div class="row">
 			<div class="col-md-8 col-sm-8" id="map" style="height: 700px;"></div>
 
@@ -145,7 +146,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 	<script src="assets/plugins/select2-4.0.3/dist/js/select2.full.min.js"></script>
 	<script src="assets/plugins/ol3/ol.js"></script>
 	<script src="assets/javascripts/config.js"></script>
-	<script src="assets/javascripts/report/map.js"></script>
+	<script src="assets/javascripts/report/map2.js"></script>
 	<script type="text/javascript"
 		src="assets/plugins/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
 	<link rel="stylesheet" type="text/css"
@@ -184,6 +185,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
     });
   });
 </script>
+<span id="pp"></span>
 </body>
 </html>
 <?php
