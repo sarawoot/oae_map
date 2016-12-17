@@ -106,12 +106,17 @@ function generate_xml(res) {
                 + id_name + '</ogc:PropertyName><ogc:Literal>';
             sld_body += item.id_code
                 + '</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><PolygonSymbolizer><Fill>';
-            _.each(res.intervals, function(interval, idx) {
-              if (item.cnt >= interval[0] && item.cnt <= interval[1]) {
-                sld_body += '<CssParameter name="fill">' + colors[idx]
-                    + '</CssParameter>';
-              }
-            })
+            _
+                .each(
+                    res.intervals,
+                    function(interval, idx) {
+                      if (item.cnt >= interval[0] && item.cnt <= interval[1]) {
+                        sld_body += '<CssParameter name="fill">' + colors[idx]
+                            + '</CssParameter>';
+                        sld_body += '<CssParameter name="fill-opacity">0.4</CssParameter>';
+
+                      }
+                    })
             sld_body += '</Fill><Stroke><CssParameter name="stroke">#FFFFFF</CssParameter><CssParameter name="stroke-width">2</CssParameter></Stroke></PolygonSymbolizer><TextSymbolizer><Label>'
                 + item.cnt
                 + '</Label><Font><CssParameter name="font-family">Tahoma</CssParameter><CssParameter name="font-size">13.0</CssParameter><CssParameter name="font-style">normal</CssParameter><CssParameter name="font-weight">bold</CssParameter></Font><LabelPlacement><PointPlacement><AnchorPoint><AnchorPointX>0.5</AnchorPointX><AnchorPointY>0.5</AnchorPointY></AnchorPoint><Displacement><DisplacementX>0.0</DisplacementX><DisplacementY>0.0</DisplacementY></Displacement></PointPlacement></LabelPlacement><Fill><CssParameter name="fill">#3D3D3D</CssParameter></Fill><Halo><CssParameter name="fill">#FFFFFF</CssParameter></Halo></TextSymbolizer></Rule>';
