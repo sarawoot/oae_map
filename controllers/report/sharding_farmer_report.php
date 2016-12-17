@@ -23,18 +23,23 @@ $expect_report_array = [
 
 $expect_report = (isset ( $_GET ['expect-report'] )) ? ( int ) $_GET ['expect-report'] : 0;
 if (isset ( $_GET ['province'] ) and $_GET ["province"] != "") {
-  $select_field = "CONCAT(AMPHUR.PROVINCE_CODE ,LPAD(AMPHUR.AMPHUR_CODE,2,'0')) AP_CODE";
-  $join = ' INNER JOIN AMPHUR ON AMPHUR.AMPHUR_CODE= AREA.AMPHUR_CODE  AND AMPHUR.PROVINCE_CODE = AREA.PROVINCE_CODE ';
-  $groupby = " GROUP BY AMPHUR.AMPHUR_CODE,AMPHUR.PROVINCE_CODE";
-  $orderby = " ORDER BY AMPHUR.AMPHUR_CODE,AMPHUR.PROVINCE_CODE";
-  $index_save = "amphur_code";
-  $index_get = "AP_CODE";
+  if (isset ( $_GET ['amphur'] ) and $_GET ["amphur"] != "") {
+    $select_field = "CONCAT(CONCAT(TAMBON.PROVINCE_CODE ,LPAD(TAMBON.AMPHUR_CODE,2,'0')) ,LPAD(TAMBON.TAMBON_CODE,2,'0') ) AP_CODE";
+    $join = '  INNER JOIN TAMBON ON TAMBON.AMPHUR_CODE= AREA.AMPHUR_CODE  AND TAMBON.PROVINCE_CODE = AREA.PROVINCE_CODE AND TAMBON.TAMBON_CODE = AREA.TAMBON_CODE ';
+    $groupby = " GROUP BY TAMBON.PROVINCE_CODE,TAMBON.AMPHUR_CODE,TAMBON.TAMBON_CODE";
+    $index_get = "AP_CODE";
+  } else {
+    $select_field = "CONCAT(AMPHUR.PROVINCE_CODE ,LPAD(AMPHUR.AMPHUR_CODE,2,'0')) AP_CODE";
+    $join = ' INNER JOIN AMPHUR ON AMPHUR.AMPHUR_CODE= AREA.AMPHUR_CODE  AND AMPHUR.PROVINCE_CODE = AREA.PROVINCE_CODE ';
+    $groupby = " GROUP BY AMPHUR.AMPHUR_CODE,AMPHUR.PROVINCE_CODE";
+    $index_get = "AP_CODE";
+  }
+  $orderby = " ORDER BY AP_CODE";
 } else {
   $select_field = 'PROVINCE.PROVINCE_CODE';
   $join = " INNER JOIN PROVINCE ON PROVINCE.PROVINCE_CODE = AREA.PROVINCE_CODE";
   $groupby = " GROUP BY PROVINCE.PROVINCE_CODE";
   $orderby = " ORDER BY PROVINCE.PROVINCE_CODE";
-  $index_save = "province_code";
   $index_get = "PROVINCE_CODE";
 }
 
@@ -68,12 +73,16 @@ if ($_GET ["water"] != "" and isset ( $_GET ["water"] )) {
 }
 
 if (isset ( $_GET ['province'] ) and $_GET ["province"] != "") {
-  $sql .= " AND AMPHUR.PROVINCE_CODE = " . (( int ) $_GET ['province']);
+  if (isset ( $_GET ['amphur'] ) and $_GET ["amphur"] != "") {
+    $sql .= "  AND TAMBON.PROVINCE_CODE = " . (( int ) $_GET ['province']) . " AND   TAMBON.AMPHUR_CODE = " . (( int ) $_GET ['amphur']);
+  } else {
+    $sql .= " AND AMPHUR.PROVINCE_CODE = " . (( int ) $_GET ['province']);
+  }
 }
+
 
 $sql .= $groupby;
 $sql .= $orderby;
-
 
 
 if ($sql != "") {
@@ -106,7 +115,7 @@ $data = array (
 
 while ( ($row = oci_fetch_array ( $result, OCI_BOTH )) != false ) {
   $data ["data"] [] = array (
-      $index_save => $row [$index_get],
+      "id_code" => $row [$index_get],
       "cnt" => $row ["CNT"] 
   );
 }

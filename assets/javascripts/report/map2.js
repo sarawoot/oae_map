@@ -75,53 +75,60 @@ var map = new ol.Map({
 //
 // });
 map.on('singleclick', function(evt) {
-  if ($('#province').val() == '') {
-    var getUrlInfo = function(layerInfo) {
-      var view = map.getView();
-      var viewResolution = view.getResolution();
-      var source = layerInfo.getSource();
-      var url = source.getGetFeatureInfoUrl(evt.coordinate, viewResolution,
-          view.getProjection(), {
-            'INFO_FORMAT' : 'application/json',
-            'FEATURE_COUNT' : 1
-          });
-      return url;
-    };
-    var url = getUrlInfo(provinceLayer);
-    var dataEntries = url.split("&");
-    var params = "";
-    for (var i = 0; i < dataEntries.length; i++) {
-      if (i === 0) {
-        url = dataEntries[i];
-      } else if (!/SLD_BODY/.test(dataEntries[i])) {
-        params = params + "&" + dataEntries[i];
-      }
+  var lonlat = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
+  var getUrlInfo = function(layerInfo) {
+    var view = map.getView();
+    var viewResolution = view.getResolution();
+    var source = layerInfo.getSource();
+    var url = source.getGetFeatureInfoUrl(evt.coordinate, viewResolution, view
+        .getProjection(), {
+      'INFO_FORMAT' : 'application/json',
+      'FEATURE_COUNT' : 1
+    });
+    return url;
+  };
+  var url = getUrlInfo(provinceLayer);
+  var dataEntries = url.split("&");
+  var params = "";
+  for (var i = 0; i < dataEntries.length; i++) {
+    if (i === 0) {
+      url = dataEntries[i];
+    } else if (!/SLD_BODY/.test(dataEntries[i])) {
+      params = params + "&" + dataEntries[i];
     }
-    var url_report = "";
-    $.ajax({
-      url : url,
-      dataType : 'json',
-      type : 'POST',
-      data : params,
-      async : false,
-      success : function(res) {
-        if (res.features.length > 0) {
+  }
+  $.ajax({
+    url : url,
+    dataType : 'json',
+    type : 'POST',
+    data : params,
+    async : false,
+    success : function(res) {
+      if (res.features.length > 0) {
+        if ($('#province').val() == '') {
           var prov_code = res.features[0].properties.prov_code;
           $('#province').val(prov_code);
-          submit_form();
+          centermap = true
+        } else {
+          var ap_idn = res.features[0].properties.ap_idn.substring(2, 4);
+          if (ap_idn[0] == '0') {
+            ap_idn = ap_idn[1];
+          }
+          $('#amphur').val(ap_idn);
+          centermap = false
         }
-      }
-    });
-  } else {
-    submit_form();
-  }
 
-  var lonlat = ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326');
-  CenterMap(lonlat[0], lonlat[1])
+        submit_form();
+        CenterMap(lonlat[0], lonlat[1], centermap)
+      }
+    }
+  });
+
 });
-function CenterMap(long, lat) {
+
+function CenterMap(long, lat, amphur) {
   map.getView().setCenter(
       ol.proj.transform([ long, lat ], 'EPSG:4326', 'EPSG:3857'));
-  map.getView().setZoom(8);
+  map.getView().setZoom((amphur ? 8 : 11));
 
 }

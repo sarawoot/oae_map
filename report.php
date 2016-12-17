@@ -31,6 +31,7 @@ oci_execute ( $result_year );
 <body>
 	<form id="report-farmer">
 		<input type="text" name="province" id="province" value=""/>
+		<input type="text" name="amphur" id="amphur" value=""/>
 		<div class="row">
 			<div class="col-md-8 col-sm-8" id="map" style="height: 700px;"></div>
 
@@ -120,6 +121,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 
 
 					<button type="submit" class="btn btn-primary">ค้นหา</button>
+					<button type="button" class="btn btn-primary"  onclick="location='./report.php'">ล้างค่า</button>
 					<button type="button" id="link-report-farmer"
 						class="btn btn-primary">รายงาน</button>
 
