@@ -14,8 +14,8 @@ $colors = array (
     "#FF0000" 
 );
 $expect_report_array = [ 
-    "count(PROFILE.PROFILE_CENTER_ID)",
-    "count(PROFILE.PROFILE_CENTER_ID)",
+    "count(DISTINCT PROFILE.PROFILE_CENTER_ID)",
+    "count(DISTINCT PROFILE.PROFILE_CENTER_ID)",
     "sum(ACTIVITY.ACT_RAI)",
     "sum(NVL(ACTIVITY.PRODUCE_AREA,0))",
     "sum(NVL(ACTIVITY.AMOUNT,0))" 
@@ -107,7 +107,20 @@ if ($num_max > 0) {
 }
 
 if ($num_max == $num_min) {
-  $intervals =[[0,0], [0,0], [$num_min,$num_max]];
+  $intervals = [ 
+      [ 
+          0,
+          0 
+      ],
+      [ 
+          0,
+          0 
+      ],
+      [ 
+          $num_min,
+          $num_max 
+      ] 
+  ];
 }
 
 $data = array (
