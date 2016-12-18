@@ -22,14 +22,35 @@ $expect_report_array = [
 ];
 
 $expect_report = (isset ( $_GET ['expect-report'] )) ? ( int ) $_GET ['expect-report'] : 0;
+if (isset ( $_GET ['province'] ) and $_GET ["province"] != "") {
+  if (isset ( $_GET ['amphur'] ) and $_GET ["amphur"] != "") {
+    $select_field = "CONCAT(CONCAT(TAMBON.PROVINCE_CODE ,LPAD(TAMBON.AMPHUR_CODE,2,'0')) ,LPAD(TAMBON.TAMBON_CODE,2,'0') ) AP_CODE";
+    $join = '  INNER JOIN TAMBON ON TAMBON.AMPHUR_CODE= AREA.AMPHUR_CODE  AND TAMBON.PROVINCE_CODE = AREA.PROVINCE_CODE AND TAMBON.TAMBON_CODE = AREA.TAMBON_CODE ';
+    $groupby = " GROUP BY TAMBON.PROVINCE_CODE,TAMBON.AMPHUR_CODE,TAMBON.TAMBON_CODE";
+    $index_get = "AP_CODE";
+  } else {
+    $select_field = "CONCAT(AMPHUR.PROVINCE_CODE ,LPAD(AMPHUR.AMPHUR_CODE,2,'0')) AP_CODE";
+    $join = ' INNER JOIN AMPHUR ON AMPHUR.AMPHUR_CODE= AREA.AMPHUR_CODE  AND AMPHUR.PROVINCE_CODE = AREA.PROVINCE_CODE ';
+    $groupby = " GROUP BY AMPHUR.AMPHUR_CODE,AMPHUR.PROVINCE_CODE";
+    $index_get = "AP_CODE";
+  }
+  $orderby = " ORDER BY AP_CODE";
+} else {
+  $select_field = 'PROVINCE.PROVINCE_CODE';
+  $join = " INNER JOIN PROVINCE ON PROVINCE.PROVINCE_CODE = AREA.PROVINCE_CODE";
+  $groupby = " GROUP BY PROVINCE.PROVINCE_CODE";
+  $orderby = " ORDER BY PROVINCE.PROVINCE_CODE";
+  $index_get = "PROVINCE_CODE";
+}
 
-$sql = " SELECT PROVINCE.PROVINCE_CODE, " . $expect_report_array [$expect_report] . " as CNT FROM PROFILE";
+$sql = " SELECT " . $select_field . ", " . $expect_report_array [$expect_report] . " as CNT FROM PROFILE";
 $sql .= " INNER JOIN AREA ON AREA.PROFILE_CENTER_ID = PROFILE.PROFILE_CENTER_ID";
-$sql .= " INNER JOIN PROVINCE ON PROVINCE.PROVINCE_CODE = AREA.PROVINCE_CODE";
+$sql .= $join;
 // $sql .= " INNER JOIN ACTIVITY ON ACTIVITY.PROFILE_CENTER_ID = PROFILE.PROFILE_CENTER_ID";
 $sql .= " INNER JOIN ACTIVITY ON ACTIVITY.AREA_ID = AREA.PROFILE_AREA_ID";
+$sql .= " WHERE 1=1 ";
 if (isset ( $_GET ["group-type"] ) and $_GET ["group-type"] != "") {
-  $sql .= " WHERE ACTIVITY.TYPE_CODE IN  (SELECT TYPE_CODE FROM TYPE WHERE GROUP_CODE = " . (( int ) $_GET ["group-type"]) . " ) ";
+  $sql .= " AND ACTIVITY.TYPE_CODE IN  (SELECT TYPE_CODE FROM TYPE WHERE GROUP_CODE = " . (( int ) $_GET ["group-type"]) . " ) ";
 }
 if (isset ( $_GET ["detail"] ) and $_GET ["detail"] != "") {
   $sql .= " AND ACTIVITY.DETAIL_CODE = '" . $_GET ["detail"] . "'";
@@ -51,11 +72,17 @@ if ($_GET ["water"] != "" and isset ( $_GET ["water"] )) {
   $sql .= " AND WATER." . str_replace ( ' ', "", $_GET ["water"] ) . " = 1";
 }
 
-$sql .= " GROUP BY PROVINCE.PROVINCE_CODE";
-$sql .= " ORDER BY PROVINCE.PROVINCE_CODE";
+if (isset ( $_GET ['province'] ) and $_GET ["province"] != "") {
+  if (isset ( $_GET ['amphur'] ) and $_GET ["amphur"] != "") {
+    $sql .= "  AND TAMBON.PROVINCE_CODE = " . (( int ) $_GET ['province']) . " AND   TAMBON.AMPHUR_CODE = " . (( int ) $_GET ['amphur']);
+  } else {
+    $sql .= " AND AMPHUR.PROVINCE_CODE = " . (( int ) $_GET ['province']);
+  }
+}
 
-// echo $sql;
-// exit ();
+$sql .= $groupby;
+$sql .= $orderby;
+
 if ($sql != "") {
   $result = oci_parse ( $conn, $sql );
   oci_execute ( $result );
@@ -79,6 +106,10 @@ if ($num_max > 0) {
   $intervals = IntervalInt ( $num_min, $num_max, $level );
 }
 
+if ($num_max == $num_min) {
+  $intervals =[[0,0], [0,0], [$num_min,$num_max]];
+}
+
 $data = array (
     "intervals" => $intervals,
     "data" => array () 
@@ -86,7 +117,7 @@ $data = array (
 
 while ( ($row = oci_fetch_array ( $result, OCI_BOTH )) != false ) {
   $data ["data"] [] = array (
-      "province_code" => $row ["PROVINCE_CODE"],
+      "id_code" => $row [$index_get],
       "cnt" => $row ["CNT"] 
   );
 }

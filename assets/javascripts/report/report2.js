@@ -1,3 +1,131 @@
+function submit_form() {
+  $.ajax({
+    url : 'controllers/report/sharding_farmer_report.php',
+    type : 'GET',
+    data : $("#report-farmer").serialize(),
+    dataType : 'json',
+    success : function(res) {
+      if ($('#province').val() != "") {
+        if ($('#amphur').val() != "") {
+          layer_name = 'oae:tambons';
+        } else {
+          layer_name = 'oae:amphoes';
+        }
+      } else {
+        layer_name = 'oae:provinces';
+      }
+      if (res.data.length == 0) {
+        provinceLayer.setSource(new ol.source.TileWMS({
+          url : oaeConfig.geoserverUrl + "/oae/wms",
+          params : {
+            LAYERS : layer_name,
+            TILED : true
+          },
+          serverType : 'geoserver',
+          tileLoadFunction : tileLoadFunction
+        }));
+        alert("ไม่พบข้อมูล");
+        return false;
+      }
+      var length_data = 0;
+      $.fancybox.open({
+        href : '#inline1',
+        type : 'inline',
+        closeBtn : false,
+        closeClick : false,
+        helpers : {
+          overlay : {
+            closeClick : false
+          }
+        }
+      });
+      sld_body = generate_xml(res);
+
+      source = new ol.source.TileWMS({
+        url : oaeConfig.geoserverUrl + "/oae/wms",
+        params : {
+          LAYERS : layer_name,
+          STYLES : '',
+          SLD_BODY : sld_body,
+          TILED : true
+        },
+        serverType : 'geoserver',
+        tileLoadFunction : tileLoadFunction
+      });
+      source.on('tileloadstart', function() {
+        length_data = length_data + 1;
+
+      });
+
+      source.on('tileloadend', function() {
+        length_data = length_data - 1;
+        if (length_data == 0)
+          $.fancybox.close()
+
+      });
+
+      provinceLayer.setSource(source);
+
+    }
+  })
+  return false;
+}
+
+function generate_xml(res) {
+  var colors = [ "#008000", "#FBFB58", "#FF0000" ];
+
+  var sld_body = '';
+  var title = '';
+  var layer_name = '';
+  var id_name = '';
+
+  if ($('#province').val() != "") {
+    if ($('#amphur').val() != "") {
+      title = 'Tambons';
+      layer_name = 'oae:tambons';
+      id_name = 'tb_idn';
+
+    } else {
+      title = 'Amphurs';
+      layer_name = 'oae:amphoes';
+      id_name = 'ap_idn';
+    }
+  } else {
+    title = 'Provinces';
+    layer_name = 'oae:provinces';
+    id_name = 'prov_code';
+  }
+  sld_body = '<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">';
+  sld_body += '<NamedLayer><Name>' + layer_name + '</Name><UserStyle><Title>'
+      + title + '</Title><Abstract>' + title + '</Abstract><FeatureTypeStyle>';
+  _
+      .each(
+          res.data,
+          function(item) {
+            sld_body += '<Rule><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>'
+                + id_name + '</ogc:PropertyName><ogc:Literal>';
+            sld_body += item.id_code
+                + '</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><PolygonSymbolizer><Fill>';
+            _
+                .each(
+                    res.intervals,
+                    function(interval, idx) {
+                      if (item.cnt >= interval[0] && item.cnt <= interval[1]) {
+                        sld_body += '<CssParameter name="fill">' + colors[idx]
+                            + '</CssParameter>';
+                        sld_body += '<CssParameter name="fill-opacity">0.4</CssParameter>';
+
+                      }
+                    })
+            sld_body += '</Fill><Stroke><CssParameter name="stroke">#FFFFFF</CssParameter><CssParameter name="stroke-width">2</CssParameter></Stroke></PolygonSymbolizer><TextSymbolizer><Label>'
+                + item.cnt
+                + '</Label><Font><CssParameter name="font-family">Tahoma</CssParameter><CssParameter name="font-size">13.0</CssParameter><CssParameter name="font-style">normal</CssParameter><CssParameter name="font-weight">bold</CssParameter></Font><LabelPlacement><PointPlacement><AnchorPoint><AnchorPointX>0.5</AnchorPointX><AnchorPointY>0.5</AnchorPointY></AnchorPoint><Displacement><DisplacementX>0.0</DisplacementX><DisplacementY>0.0</DisplacementY></Displacement></PointPlacement></LabelPlacement><Fill><CssParameter name="fill">#3D3D3D</CssParameter></Fill><Halo><CssParameter name="fill">#FFFFFF</CssParameter></Halo></TextSymbolizer></Rule>';
+          });
+  sld_body += '<Rule><Name>rule1</Name><Title>Rule 1</Title><Abstract>Rule 1</Abstract><PolygonSymbolizer><Fill><CssParameter name="fill-opacity">0</CssParameter></Fill><Stroke><CssParameter name="stroke">#3D3D3D</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>';
+
+  return sld_body;
+}
+
 $(function() {
   $("[select2]").select2();
   $("#farmer-type").change(function() {
@@ -24,101 +152,11 @@ $(function() {
       }
     });
   });
-  $("#report-farmer")
-      .submit(
-          function() {
-            // var host = location.href.replace(/\/([^\/]+)\/?$/, '/');
-            $
-                .ajax({
-                  url : 'controllers/report/sharding_farmer_report.php',
-                  type : 'GET',
-                  data : $("#report-farmer").serialize(),
-                  dataType : 'json',
-                  success : function(res) {
 
-                    if (res.data.length == 0) {
-                      provinceLayer.setSource(new ol.source.TileWMS({
-                        url : oaeConfig.geoserverUrl + "/oae/wms",
-                        params : {
-                          LAYERS : 'oae:provinces',
-                          TILED : true
-                        },
-                        serverType : 'geoserver',
-                        tileLoadFunction : tileLoadFunction
-                      }));
-                      alert("ไม่พบข้อมูล");
-                      return false;
-                    }
-                    $.fancybox.open({
-                      href : '#inline1',
-                      type : 'inline',
-                      closeBtn : false,
-                      closeClick : false,
-                      helpers : {
-                        overlay : {
-                          closeClick : false
-                        }
-                      // prevents closing when clicking OUTSIDE fancybox
-                      }
-                    });
-                    var sld_body = '<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><NamedLayer><Name>oae:provinces</Name><UserStyle><Title>Provinces</Title><Abstract>Provinces</Abstract><FeatureTypeStyle>';
-                    var colors = [ "#008000", "FBFB58", "#FF0000" ];
-                    var length_data = 0;
-                    _
-                        .each(
-                            res.data,
-                            function(item) {
-                              sld_body += '<Rule><ogc:Filter><ogc:PropertyIsEqualTo><ogc:PropertyName>prov_code</ogc:PropertyName><ogc:Literal>';
-                              sld_body += item.province_code
-                                  + '</ogc:Literal></ogc:PropertyIsEqualTo></ogc:Filter><PolygonSymbolizer><Fill>';
-                              _.each(res.intervals, function(interval, idx) {
-                                if (interval[0] <= item.cnt
-                                    && interval[1] >= item.cnt) {
-                                  sld_body += '<CssParameter name="fill">'
-                                      + colors[idx] + '</CssParameter>';
-                                }
-                              })
-                              sld_body += '</Fill><Stroke><CssParameter name="stroke">#FFFFFF</CssParameter><CssParameter name="stroke-width">2</CssParameter></Stroke></PolygonSymbolizer><TextSymbolizer><Label>'
-                                  + item.cnt
-                                  + '</Label><Font><CssParameter name="font-family">Tahoma</CssParameter><CssParameter name="font-size">13.0</CssParameter><CssParameter name="font-style">normal</CssParameter><CssParameter name="font-weight">bold</CssParameter></Font><LabelPlacement><PointPlacement><AnchorPoint><AnchorPointX>0.5</AnchorPointX><AnchorPointY>0.5</AnchorPointY></AnchorPoint><Displacement><DisplacementX>0.0</DisplacementX><DisplacementY>0.0</DisplacementY></Displacement></PointPlacement></LabelPlacement><Fill><CssParameter name="fill">#3D3D3D</CssParameter></Fill><Halo><CssParameter name="fill">#FFFFFF</CssParameter></Halo></TextSymbolizer></Rule>';
-                            });
-                    // <TextSymbolizer><Label><ogc:PropertyName>name_thai</ogc:PropertyName></Label><Font><CssParameter
-                    // name="font-family">Tahoma</CssParameter><CssParameter
-                    // name="font-size">13.0</CssParameter><CssParameter
-                    // name="font-style">normal</CssParameter><CssParameter
-                    // name="font-weight">bold</CssParameter></Font><LabelPlacement><PointPlacement><AnchorPoint><AnchorPointX>0.5</AnchorPointX><AnchorPointY>0.5</AnchorPointY></AnchorPoint><Displacement><DisplacementX>0.0</DisplacementX><DisplacementY>0.0</DisplacementY></Displacement></PointPlacement></LabelPlacement><Fill><CssParameter
-                    // name="fill">#3D3D3D</CssParameter></Fill></TextSymbolizer>
-                    sld_body += '<Rule><Name>rule1</Name><Title>Rule 1</Title><Abstract>Rule 1</Abstract><PolygonSymbolizer><Fill><CssParameter name="fill-opacity">0</CssParameter></Fill><Stroke><CssParameter name="stroke">#3D3D3D</CssParameter></Stroke></PolygonSymbolizer></Rule></FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>';
-                    source = new ol.source.TileWMS({
-                      url : oaeConfig.geoserverUrl + "/oae/wms",
-                      params : {
-                        LAYERS : 'oae:provinces',
-                        STYLES : '',
-                        SLD_BODY : sld_body,
-                        TILED : true
-                      },
-                      serverType : 'geoserver',
-                      tileLoadFunction : tileLoadFunction
-                    });
-                    source.on('tileloadstart', function() {
-                      length_data = length_data + 1;
+  $("#report-farmer").submit(function() {
+    return submit_form();
+  });
 
-                    });
-
-                    source.on('tileloadend', function() {
-                      length_data = length_data - 1;
-                      if (length_data == 0)
-                        $.fancybox.close()
-
-                    });
-
-                    provinceLayer.setSource(source);
-
-                  }
-                })
-
-            return false;
-          });
   $("#link-report-farmer")
       .click(
           function() {

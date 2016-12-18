@@ -21,17 +21,22 @@ oci_execute ( $result_year );
 <link rel="stylesheet" href="assets/plugins/ol3/ol.css">
 <link rel="stylesheet"
 	href="assets/plugins/select2-4.0.3/dist/css/select2.min.css">
-<style>
-.loading {
-	display: none;
-}
-</style>
+<link rel="stylesheet" href="assets/popup.css">
+<link rel="stylesheet" href="assets/ol.css">
+
 </head>
 
 <body>
 	<form id="report-farmer">
+		<input type="hidden" name="province" id="province" value="" /> <input
+			type="hidden" name="amphur" id="amphur" value="" />
 		<div class="row">
-			<div class="col-md-8 col-sm-8" id="map" style="height: 700px;"></div>
+			<div class="col-md-8 col-sm-8" id="map" style="height: 700px;">
+				<div id="popup" class="ol-popup">
+					<a href="#" id="popup-closer" class="ol-popup-closer"></a>
+					<div id="popup-content"></div>
+				</div>
+			</div>
 
 			<div class="col-md-4 col-sm-4"
 				style="padding-right: 40px; padding-top: 20px;">
@@ -119,6 +124,8 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 
 
 					<button type="submit" class="btn btn-primary">ค้นหา</button>
+					<button type="button" class="btn btn-primary"
+						onclick="location='./report.php'">ล้างค่า</button>
 					<button type="button" id="link-report-farmer"
 						class="btn btn-primary">รายงาน</button>
 
@@ -145,7 +152,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 	<script src="assets/plugins/select2-4.0.3/dist/js/select2.full.min.js"></script>
 	<script src="assets/plugins/ol3/ol.js"></script>
 	<script src="assets/javascripts/config.js"></script>
-	<script src="assets/javascripts/report/map.js"></script>
+	<script src="assets/javascripts/report/map2.js"></script>
 	<script type="text/javascript"
 		src="assets/plugins/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
 	<link rel="stylesheet" type="text/css"
@@ -184,6 +191,7 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
     });
   });
 </script>
+	<span id="pp"></span>
 </body>
 </html>
 <?php
