@@ -3,7 +3,7 @@ include ("../config/config.php");
 $conn = connectionOracleDB ();
 $sql = "SELECT DETAIL_CODE, DETAIL_NAME FROM DETAIL ";
 if (isset ( $_GET ["group_code"] )) {
-  $sql .= "where  TYPE_CODE IN (SELECT TYPE_CODE FROM TYPE WHERE GROUP_CODE = " . (( int ) $_GET ["group_code"]) . " )   ";
+  $sql .= "where  TYPE_CODE IN (SELECT TYPE_CODE FROM TYPE WHERE GROUP_CODE = " . (( int ) $_GET ["group_code"]) . " )   ORDER BY DETAIL_NAME ";
 }
 // echo $sql;
 $result = oci_parse ( $conn, $sql );

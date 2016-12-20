@@ -2,7 +2,7 @@
 include ("./config/config.php");
 
 $connOracle = connectionOracleDB ();
-$result_type = oci_parse ( $connOracle, 'SELECT DISTINCT GROUP_CODE,GROUP_NAME FROM TYPE' );
+$result_type = oci_parse ( $connOracle, 'SELECT DISTINCT GROUP_CODE,GROUP_NAME FROM TYPE ORDER BY GROUP_NAME' );
 oci_execute ( $result_type );
 
 $result_year = oci_parse ( $connOracle, 'SELECT distinct SUBSTR(REGISTER_DATE,0, 4) as YEAR FROM PROFILE order by SUBSTR(REGISTER_DATE,0, 4)' );
@@ -115,8 +115,8 @@ while ( ($row = oci_fetch_array ( $result_type, OCI_BOTH )) != false ) {
 							id="farmer-expect-report" name="expect-report"
 							class="form-control" select2>
 							<option value="1">จำนวนทะเบียน</option>
-							<option value="2">เนื้อที่เพาะปลูก</option>
-							<option value="3">เนื้อที่เก็บเกี่ยว</option>
+							<option value="2">เนื้อที่เพาะปลูก/เพาะเลี้ยง</option>
+							<option value="3">เนื้อที่เก็บเกี่ยว/ให้ผลผลิต</option>
 							<option value="4">ผลผลิตที่คาดว่าจะได้รับ</option>
 						</select>
 					</div>

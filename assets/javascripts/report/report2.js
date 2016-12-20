@@ -72,7 +72,7 @@ function submit_form() {
 }
 
 function generate_xml(res) {
-  var colors = [ "#008000", "#FBFB58", "#FF0000" ];
+  var colors = [ "#FF0000", "#FBFB58", "#008000" ];
 
   var sld_body = '';
   var title = '';
