@@ -10,6 +10,12 @@
   if (isset($_POST['year']) and $_POST['year'] != '') {
     $sql_intersect .= " and year = ".$_POST['year'];
   }
+  if ($_POST["type"] != "" and isset($_POST["type"])) {
+    $sql_intersect .= " and type_code in ('".join($_POST["type"], "', '")."') ";
+  }
+  if ($_POST["detail"] != "" and isset($_POST["detail"])) {
+    $sql_intersect .= " and detail_name in ('".join($_POST["detail"], "', '")."') ";
+  }
   // SQL Count Row
   if ($_POST["total"] == '1') {
     $sql_count = "select count(*) as n from (".$sql_intersect.") as tb;";

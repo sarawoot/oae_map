@@ -16,7 +16,7 @@
           <option value="wms" <%= (category == "wms") ? 'selected' : '' %>>ชั้นข้อมูลแบบ WMS</option>
           <option value="tile" <%= (category == "tile") ? 'selected' : '' %>>ชั้นข้อมูลแบบ Tile</option>
           <option value="kml" <%= (category == "kml") ? 'selected' : '' %>>ชั้นข้อมูลแบบ KML</option>
-          <option value="shp" <%= (category == "shp") ? 'selected' : '' %>>ชั้นข้อมูลแบบ Shapefile</option>
+          
         </select>
       </div>
       <div class="form-group">

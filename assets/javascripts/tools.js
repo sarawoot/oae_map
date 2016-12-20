@@ -217,18 +217,18 @@ $(function(){
       height: 200,
       title: "กำหนด",
       buttons: {
-        Close: {
-          click: function () {
-            dialogDestroy();
-          },
-          text: 'ยกเลิก'
-        },
         Save: {
           text: "ยืนยัน",
           click: function(){
             oaeConfig.drawColor = $('#fColorDraw').colorpicker('getValue');
             dialogDestroy();
           }
+        },
+        Close: {
+          click: function () {
+            dialogDestroy();
+          },
+          text: 'ยกเลิก'
         }
       },
       close: function(){

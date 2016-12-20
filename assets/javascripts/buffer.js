@@ -19,13 +19,12 @@ var buffer = (function(){
       draw.on('drawend', function(evt) {
         var feature = evt.feature;
         var format = new ol.format.WKT();
-        var wkt = format.writeFeature( feature, 
-                    {featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326'});
+        var wkt = format.writeFeature(feature);
         removeOtherInteraction();
         var tmp = _.template($("#tmpBuffer").html()),
             dialog = $("#dialog");
         dialog.html(tmp({wkt: wkt}));
-
+        
         $.ajax({
           url: "controllers/years.php",
           type: 'GET',
@@ -46,19 +45,56 @@ var buffer = (function(){
             });
           }
         });
-
+        $.ajax({
+          url: "controllers/types.php",
+          type: 'GET',
+          // async: false,
+          dataType: "json",
+          success: function(res){
+            var elem = $("#buffer_type");
+            elem.empty();
+            elem.append($("<option>",{
+              text: '',
+              value: ''
+            }));
+            _.each(res, function(item){
+              elem.append($("<option>",{
+                text: item.name,
+                value: item.code
+              }));
+            });
+          }
+        });
+        $("#buffer_type").unbind().change(function(){
+          $.ajax({
+            url: "controllers/details.php",
+            type: 'GET',
+            dataType: "json",
+            data: {
+              type_code: $("#buffer_type").val()
+            },
+            success: function(res){
+              var elem = $("#buffer_detail");
+              elem.empty();
+              elem.append($("<option>",{
+                text: '',
+                value: ''
+              }));
+              _.each(res, function(item){
+                elem.append($("<option>",{
+                  text: item.name,
+                  value: item.name
+                }));
+              });
+            }
+          });
+        });
+        $(".select2-muti").select2();
         dialog.dialog({
           width: 400,
-          height: 230,
+          height: 420,
           title: "Buffer",
           buttons: {
-            Close: {
-              click: function () {
-                clearAll();
-                $("#resultPanel").empty();
-              },
-              text: 'ยกเลิก'
-            },
             Save: {
               text: "ยืนยัน",
               click: function(){
@@ -66,15 +102,22 @@ var buffer = (function(){
                 var buffer = form.buffer.value;
                 var wkt = form.wkt.value;
                 if (Number(buffer) && Number(buffer) > 0) {
+                  buffer = Number(buffer)*1000
                   var format = new ol.format.WKT();
-                  var feature = format.readFeature( wkt, 
-                    {featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326'});
+                  var feature = format.readFeature(wkt);
                   var geom = feature.getGeometry();
-                  calcBuffer(geom.getCoordinates(), buffer, $("#year_buffer").val());  
+                  calcBuffer(geom.getCoordinates(), buffer, $("#frmBuffer").serializeArray());  
                 } else {
                   alert("กรุณาทำรายการให้ถูกต้อง");
                 }
               }
+            },
+            Close: {
+              click: function () {
+                clearAll();
+                $("#resultPanel").empty();
+              },
+              text: 'ยกเลิก'
             }
           },
           position: { my: "right bottom", at: "right bottom", of: window },
@@ -138,6 +181,53 @@ var buffer = (function(){
             dialog = $("#dialog");
         dialog.html(tmp({wkt: wkt}));
 
+
+        $.ajax({
+          url: "controllers/types.php",
+          type: 'GET',
+          // async: false,
+          dataType: "json",
+          success: function(res){
+            var elem = $("#intersect_type");
+            elem.empty();
+            elem.append($("<option>",{
+              text: '',
+              value: ''
+            }));
+            _.each(res, function(item){
+              elem.append($("<option>",{
+                text: item.name,
+                value: item.code
+              }));
+            });
+          }
+        });
+        $("#intersect_type").unbind().change(function(){
+          $.ajax({
+            url: "controllers/details.php",
+            type: 'GET',
+            dataType: "json",
+            data: {
+              type_code: $("#intersect_type").val()
+            },
+            success: function(res){
+              var elem = $("#intersect_detail");
+              elem.empty();
+              elem.append($("<option>",{
+                text: '',
+                value: ''
+              }));
+              _.each(res, function(item){
+                elem.append($("<option>",{
+                  text: item.name,
+                  value: item.name
+                }));
+              });
+            }
+          });
+        });
+        $(".select2-muti").select2();
+
         $.ajax({
           url: "controllers/years.php",
           type: 'GET',
@@ -161,22 +251,21 @@ var buffer = (function(){
 
         dialog.dialog({
           width: 400,
-          height: 180,
+          height: 350,
           title: "Intersect",
           buttons: {
+            Save: {
+              text: "ยืนยัน",
+              click: $.proxy(function(){
+                paginate(this.feature, $("#frmIntersect").serializeArray());
+              }, {feature: feature})
+            },
             Close: {
               click: function () {
                 clearAll();
                 $("#resultPanel").empty();
               },
               text: 'ยกเลิก'
-            },
-            Save: {
-              text: "ยืนยัน",
-              click: $.proxy(function(){
-                var form = $("#frmIntersect")[0];
-                paginate(this.feature, form.year.value);
-              }, {feature: feature})
             }
           },
           position: { my: "right bottom", at: "right bottom", of: window },
@@ -197,7 +286,7 @@ var buffer = (function(){
 
   };
 
-  var calcBuffer = function(coor, buffer, year){
+  var calcBuffer = function(coor, buffer, data){
     var circle = new ol.geom.Circle(coor, Number(buffer));
     feature_tmp = [];
 
@@ -216,10 +305,11 @@ var buffer = (function(){
 
     var polygon = ol.geom.Polygon.fromCircle(circle, 64);
     feature = new ol.Feature({ geometry: polygon });
-    paginate(feature, year);
+    paginate(feature, data);
   };
 
-  var paginate = function(feature, year) {
+  var paginate = function(feature, data) {
+
     var format = new ol.format.WKT();
     var wkt = format.writeFeature( feature, 
                 {featureProjection: 'EPSG:3857', dataProjection: 'EPSG:4326'});
@@ -235,13 +325,20 @@ var buffer = (function(){
     tag_center.append(div_paginate);
     tag_center.append(span_total);
     panel.append(tag_center);
+    data.push({name: 'wkt', value: wkt});
     $.ajax({
       url: 'controllers/buffer.php',
       type: 'POST',
       dataType: 'json',
-      data: { wkt: wkt, total: 1, year: year },
+      data: _.concat(data, {name: 'total', value: 1}),
       success: function(res){
         if (res.n === '0') { 
+          var feature_ = _.filter(features.getArray(), function(feature){ 
+            return feature.get('type') == 'result-search' 
+          });
+          _.each(feature_, function(feature) {
+            features.remove(feature)
+          });
           alert('ไม่พบข้อมูล');
           return; 
         }
@@ -260,9 +357,9 @@ var buffer = (function(){
           lastClass: 'last',
           firstClass: 'first'
         }).on("page", function(event, num){
-          render(wkt, num, year);
+          render(data, num);
         });
-        render(wkt, 1, year);
+        render(data, 1);
       }
     });
     // Expand Resule Panel if collapsed
@@ -271,12 +368,12 @@ var buffer = (function(){
     }
   }
 
-  var render = function(wkt, page, year){
+  var render = function(data, page){
     $.ajax({
       url: 'controllers/buffer.php',
       type: 'POST',
       dataType: 'json',
-      data: { wkt: wkt, page: page, year: year },
+      data: _.concat(data, {name: 'page', value: page}),
       success: function(res){
         $("#resultPanel table").remove();
         popup.hide();
