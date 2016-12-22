@@ -1,19 +1,19 @@
     <!-- Toolbar Map -->
     <div id="mapToolbar" style="z-index:45;position:absolute;top:60px;right:50px">
       <button type="button" class="btn btn-default icon-sm" id="btnHomeMap">
-        <span class="glyphicon glyphicon-home" data-type="tooltip" data-placement="bottom" title="กลับสู่ประเทศไทย"></span>
+        <span class="glyphicon icon-home" data-type="tooltip" data-placement="bottom" title="กลับสู่ประเทศไทย"></span>
       </button>
 
       <button type="button" class="btn btn-default icon-sm" id="btnClearMap">
-        <span class="glyphicon glyphicon-remove-circle" data-type="tooltip" data-placement="bottom" title="ล้างข้อมูลทั้งหมด"></span>
+        <span class="glyphicon icon-clear-all" data-type="tooltip" data-placement="bottom" title="ล้างข้อมูลทั้งหมด"></span>
       </button>
 
       <button type="button" class="btn btn-default icon-sm active" id="btnPanMap">
-        <span class="glyphicon icon-hand" data-type="tooltip" data-placement="bottom" title="โหมด Pan"></span>
+        <span class="glyphicon icon-pan" data-type="tooltip" data-placement="bottom" title="โหมด Pan"></span>
       </button>
       
       <button type="button" class="btn btn-default icon-sm" aria-haspopup="true" aria-expanded="false" id="btnInfoPOI" data-type="tooltip" data-placement="bottom" title="รายละเอียด POI">
-        <span class="glyphicon glyphicon-info-sign"></span></span>
+        <span class="glyphicon icon-info"></span></span>
       </button>
 
       <div class="btn-group" role="group">
@@ -48,7 +48,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle icon-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnExport" data-type="tooltip" data-placement="bottom" title="ส่งออก">
-          <span class="glyphicon glyphicon-download-alt"></span> <span class="caret"></span>
+          <span class="glyphicon icon-download"></span> <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
           <li><a id="btnExportPNG" download="map.png">PNG</a></li>
@@ -73,10 +73,10 @@
       <!-- id="btnIntersect" -->
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-default icon-sm" data-group="intersect" data-type="tooltip" data-placement="bottom" title="อินเตอร์เซค" category="Polygon">
-        <span class="glyphicon icon-polygon2"></span>
+        <span class="glyphicon icon-intersect-poly"></span>
         </button>
         <button type="button" class="btn btn-default icon-sm" data-group="intersect" category="Box" data-type="tooltip" data-placement="bottom" title="อินเตอร์เซค">
-          <span class="glyphicon icon-rectangle"></span>
+          <span class="glyphicon icon-intersect-rec"></span>
         </button>
         <button type="button" class="btn btn-default icon-sm" data-group="intersect" category="Square" data-type="tooltip" data-placement="bottom" title="อินเตอร์เซค">
           <span class="glyphicon icon-square"></span>
@@ -84,15 +84,15 @@
       </div>
 
       <button type="button" class="btn btn-default icon-sm" id="btnSearch" data-type="tooltip" data-placement="bottom" title="ค้นหา">
-        <span class="glyphicon glyphicon-search"></span>
+        <span class="glyphicon icon-search"></span>
       </button>
 
-      <a href="report.php" type="button" class="btn btn-default icon-sm" data-type="tooltip" data-placement="bottom" title="รายงาน">
-        <span class="glyphicon glyphicon-list-alt"></span>
+      <a href="report.php" type="button" class="btn btn-default icon-sm" data-type="tooltip" data-placement="bottom" title="รายงาน" target="_blank">
+        <span class="glyphicon icon-report"></span>
       </a>
 
       <button type="button" class="btn btn-default icon-sm" id="btnCofigDraw" data-type="tooltip" data-placement="bottom" title="ตั้งค่าสีการวาด">
-        <span class="glyphicon glyphicon-cog"></span>
+        <span class="glyphicon icon-setting"></span>
       </button>
 
     </div>

@@ -76,6 +76,72 @@
   height: 16px;
 }
 
+.icon-home{
+  background-image: url("../images/icons/home.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-clear-all{
+  background-image: url("../images/icons/clear-all.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-pan{
+  background-image: url("../images/icons/pan.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-info{
+  background-image: url("../images/icons/info.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-download{
+  background-image: url("../images/icons/download.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-report{
+  background-image: url("../images/icons/report.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-intersect-poly{
+  background-image: url("../images/icons/intersect-poly.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-intersect-rec{
+  background-image: url("../images/icons/intersect-rec.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-intersect-sq{
+  background-image: url("../images/icons/icon-intersect-sq.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-search{
+  background-image: url("../images/icons/search.png");
+  width: 16px;
+  height: 16px;
+}
+
+.icon-setting{
+  background-image: url("../images/icons/setting.png");
+  width: 16px;
+  height: 16px;
+}
+
 .icon-sm{
   padding: 6px;
 }
