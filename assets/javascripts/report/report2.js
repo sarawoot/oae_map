@@ -160,7 +160,7 @@ $(function() {
   $("#link-report-farmer")
       .click(
           function() {
-            var url = 'http://192.168.0.220:9502/analytics/saw.dll?';
+            var url = 'http://192.168.4.232:9502/analytics/saw.dll?';
             url += 'Go&Path=/shared/OAE_REPORT/GIS_REG_01&Action=Navigate&P0=3&P1=eq';
             url += '&P2="ข้อมูลพื้นฐานครัวเรือนเกษตรกร"."ปีที่ขึ้นทะเบียนเกษตรกร"&P3="'
                 + $("#farmer-year").val() + '"';

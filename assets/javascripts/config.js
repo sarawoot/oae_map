@@ -4,7 +4,7 @@ var oaeConfig = {
   mode: "normal",
   currentLayer: null,
   drawColor: "#ffcc33",
-  geoserverUrl: "http://192.168.0.202:8080/geoserver",
+  geoserverUrl: "http://192.168.4.230:8080/geoserver",
 };
 
 var dragDialog = function(event, ui) {

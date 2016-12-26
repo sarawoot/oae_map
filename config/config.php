@@ -1,6 +1,6 @@
 <?php
   function connectionDB() {
-    $conn_string = "host=192.168.0.202 port=5432 dbname=oae user=postgres password=P@ssw0rd";
+    $conn_string = "host=192.168.4.230 port=5432 dbname=oae user=postgres password=P@ssw0rd";
     $conn = pg_connect($conn_string);
     if (!$conn) {
       echo "Postgresql error occurred.\n";
@@ -11,7 +11,7 @@
 
   function connectionOracleDB() {
     putenv("NLS_LANG=AMERICAN_AMERICA.TH8TISASCII");
-    $conn = oci_connect('OAE', 'AdminOae', '192.168.0.228/OAEDB');
+    $conn = oci_connect('OAE', 'AdminOae', '192.168.4.234/OAEDB');
     if (!$conn) {
       echo "Oracle error occurred.\n";
       exit;
@@ -20,7 +20,9 @@
   }
 
   function connectLDAP(){
-    $ldap = ldap_connect("192.168.0.3", "389") or die("Could not connect to LDAP");
+    $ldap = ldap_connect("192.168.1.4", "389") or die("Could not connect to LDAP");
+    ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+    ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
     return $ldap;
   }
 

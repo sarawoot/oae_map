@@ -1,11 +1,11 @@
 <?php
   include("../config/config.php");
   function get_members($filter, $user, $password) {
-    $ldap_dn = "OU=User,DC=betimes,DC=local";
+    $ldap_dn = "DC=oae,DC=intra";
     $ldap = connectLDAP();
     @ldap_bind($ldap, $user, $password) or die("Could not bind to LDAP");
     $attributes = array("*");
-    $results = ldap_search($ldap, $ldap_dn, "(&(objectCategory=*)(displayname=$filter*))", $attributes,null,5);
+    $results = ldap_search($ldap, $ldap_dn, "(&(objectCategory=*)(displayName=$filter*))", $attributes,null,4);
     $entries = ldap_get_entries($ldap, $results);
     ldap_close($ldap);
     return $entries;
@@ -19,7 +19,7 @@
   if(($_GET["q"]) != "") {
     $Query = $_GET["q"];
     $i = 0;
-    $res = get_members($Query, "test01", "P@ssw0rd");
+    $res = get_members($Query, 'betime@oae.intra', 'Be@2016oae');
     foreach ($res as $row) {
       if (isset($row["displayname"][0])) {
         $data["items"][] = array(
@@ -30,7 +30,7 @@
         );
       }
     }
-    $data["total_count"] = count($res);
+    $data["total_count"] += count($res);
   }
   echo json_encode($data);
 ?>

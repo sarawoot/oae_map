@@ -3,7 +3,7 @@
   include('config/config.php');
   if (isset($_POST['username']) and isset($_POST['password'])) {
     $ldap = connectLDAP();
-    $ldapbind = ldap_bind($ldap, $_POST['username'], $_POST['password']);
+    $ldapbind = ldap_bind($ldap,  $_POST['username'].'@oae.intra', $_POST['password']);
     ldap_close($ldap);
     if ($ldapbind) {
       $conn = connectionDB();
@@ -20,6 +20,7 @@
       }
       pg_close($conn);
     } else {
+      echo "dfdfd";
       $_SESSION['error'] = 'กรุณาตรวจสอบ ชื่อผู้ใช้งาน และ รหัสผ่าน อีกครั้ง';
     }
   }
