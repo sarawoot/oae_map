@@ -192,7 +192,7 @@ var LayerSwitcher = (function(){
       layer = new ol.layer.Tile({
         source: new ol.source.OSM({
           url: attr.url,
-          crossOrigin: 'Anonymous'
+          // crossOrigin: 'Anonymous'
         }),
         opacity: 1
       });
@@ -204,7 +204,7 @@ var LayerSwitcher = (function(){
           params: {
             tiled: true
           },
-          crossOrigin: 'Anonymous'
+          // crossOrigin: 'Anonymous'
         })
       })
     }
@@ -214,7 +214,7 @@ var LayerSwitcher = (function(){
         source: new ol.source.ImageWMS({
           url: attr.url,
           params: {},
-          crossOrigin: 'Anonymous'
+          // crossOrigin: 'Anonymous'
         })
       })
     }
@@ -223,7 +223,7 @@ var LayerSwitcher = (function(){
         source: new ol.source.Vector({
           url: attr.url,
           format: new ol.format.KML(),
-          crossOrigin: 'Anonymous'
+          // crossOrigin: 'Anonymous'
         })
       });
     }
@@ -237,7 +237,7 @@ var LayerSwitcher = (function(){
             "LAYERS": "oae:poi",
             "VERSION": "1.1.1"
           },
-          crossOrigin: 'Anonymous'
+          // crossOrigin: 'Anonymous'
         })
       })
     }
@@ -251,7 +251,7 @@ var LayerSwitcher = (function(){
             "VERSION": "1.1.1",
             STYLES: oaeConfig.mode == "infoFarmer" ? 'point' : '',
           },
-          crossOrigin: 'Anonymous'
+          // crossOrigin: 'Anonymous'
         })
       })
     }    
