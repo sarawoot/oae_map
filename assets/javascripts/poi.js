@@ -120,7 +120,7 @@ var poi = (function(){
                         "VERSION": "1.1.1",
                         id_random: getRandomInt(1, 100000000)
                       },
-                      crossOrigin: 'Anonymous'
+                      // crossOrigin: 'Anonymous'
                     }));
                   }
                   
@@ -193,7 +193,7 @@ var poi = (function(){
                         "VERSION": "1.1.1",
                         id_random: getRandomInt(1, 100000000)
                       },
-                      crossOrigin: 'Anonymous'
+                      // crossOrigin: 'Anonymous'
                     }));
                   }
                   
@@ -257,7 +257,7 @@ var poi = (function(){
                         "VERSION": "1.1.1",
                         id_random: getRandomInt(1, 100000000)
                       },
-                      crossOrigin: 'Anonymous'
+                      // crossOrigin: 'Anonymous'
                     }));
                   }
                   

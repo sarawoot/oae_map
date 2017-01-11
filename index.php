@@ -36,6 +36,7 @@
               <ul class="dropdown-menu" data-type="container_layers" style="z-index:46;">
               </ul>
             </li>
+            <li><a href="javascript:void(0)" id="toggle_toolbar">ซ่อนแถบเครื่องมือ</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">

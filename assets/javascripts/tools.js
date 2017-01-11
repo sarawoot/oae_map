@@ -1,4 +1,14 @@
 $(function(){
+  $("#toggle_toolbar").click(function() {
+    $("#mapToolbar").toggle();
+    $("#poiTool").toggle();
+    if ($("#mapToolbar").is(":visible")) {
+     $("#toggle_toolbar").html("ซ่อนแถบเครื่องมือ"); 
+    } else {
+      $("#toggle_toolbar").html("แสดงแถบเครื่องมือ");
+    }
+  })
+
   $('[data-type="tooltip"]').tooltip();
 
   $("[number-only]").on('keypress',function(evt) {
@@ -67,7 +77,7 @@ $(function(){
   $("#btnExportPNG").click(function(){
     map.once('postcompose', function(event) {
       var canvas = event.context.canvas;
-      canvas.setAttribute('crossOrigin', 'Anonymous');
+      // canvas.setAttribute('crossOrigin', 'anonymous');
       $("#btnExportPNG")[0].href = canvas.toDataURL();
     });
     map.renderSync();
@@ -76,6 +86,7 @@ $(function(){
   $("#btnExportJPEG").click(function(){
     map.once('postcompose', function(event) {
       var canvas = event.context.canvas;
+      // canvas.setAttribute('crossOrigin', 'anonymous');
       $("#btnExportJPEG")[0].href = canvas.toDataURL();
     });
     map.renderSync();
