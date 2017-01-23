@@ -86,11 +86,13 @@ var LayerSwitcher = (function(){
         action: function(data){
           var inst = $.jstree.reference(data.reference),
               obj = inst.get_node(data.reference);
+              ids = _.clone(obj.children_d);
+              ids.push(obj.id)      
           $.ajax({
             type: "POST",
             url: "controllers/delete_layer.php",
             dataType: 'json',
-            data: {id: obj.id},
+            data: {ids: ids},
             success: function(data){
               if (data.success) {
                 treeRefresh();
