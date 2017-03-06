@@ -1,3 +1,11 @@
+function numberWithCommas(x) {
+  x = x.toString();
+  var pattern = /(-?\d+)(\d{3})/;
+  while (pattern.test(x))
+      x = x.replace(pattern, "$1,$2");
+  return x;
+}
+
 var measure = (function () {
   var init= function(){
     $("#mapToolbar button[data-group=measure]").on("click", function(){
@@ -128,15 +136,29 @@ var measure = (function () {
   var formatArea = function(polygon) {
     var area;
     area = polygon.getArea();
-    var output;
-    if (area > 10000) {
-        output = (Math.round(area / 1000000 * 100) / 100) +
-          ' ' + 'km<sup>2</sup>';
-    } else {
-        output = (Math.round(area * 100) / 100) +
-          ' ' + 'm<sup>2</sup>';
+    var area = (Math.round(area * 100) / 100);
+    // if (area > 10000) {
+    //     output = (Math.round(area / 1000000 * 100) / 100) +
+    //       ' ' + 'km<sup>2</sup>';
+    // } else {
+    //     output = (Math.round(area * 100) / 100) +
+    //       ' ' + 'm<sup>2</sup>';
+    // }
+    var str = "";
+    var rai = Math.floor(area/1600)
+    var nang = Math.floor((area%1600)/400)
+    var wa =  ((area%1600)%400)/4
+    if (rai > 0) {
+      str += " "+numberWithCommas(rai)+" ไร่"
     }
-    return output;
+    if (nang > 0) {
+      str += " "+numberWithCommas(Math.round(nang*100)/100)+" งาน"
+    }
+    if (wa > 0) {
+      str += " "+numberWithCommas(Math.round(wa*100)/100)+" วา"
+    }
+
+    return str;
   };
 
   var continueLineMsg = 'Click to continue drawing the line';
